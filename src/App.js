@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import gerarPDF from "./componets/GeradorPDF";
 import { estilos } from "./componets/Estilos";
@@ -15,8 +15,17 @@ function App() {
   const [servicos, setServicos] = useState([]);
   const [orcamentoFinalizado, setOrcamentoFinalizado] = useState(false);
 
-  // Mensagem de erro (só para exibir no topo)
+  // Mensagem de erro inicial
   const [mensagemErro, setMensagemErro] = useState("Erro: Sistema atualizado recentemente. Por favor, verifique possíveis instabilidades.");
+
+  // Faz a mensagem sumir após 5 segundos
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMensagemErro(""); // Limpa a mensagem
+    }, 5000);
+
+    return () => clearTimeout(timer); // Limpa o timer se o componente desmontar
+  }, []);
 
   const adicionarServico = () => {
     if (servico && preco) {
