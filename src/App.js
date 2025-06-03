@@ -15,18 +15,19 @@ function App() {
   const [servicos, setServicos] = useState([]);
   const [orcamentoFinalizado, setOrcamentoFinalizado] = useState(false);
 
+  // Lista de orçamentos finalizados
+  const [orcamentos, setOrcamentos] = useState([]);
+
   // Mensagem de erro inicial
   const [mensagemErro, setMensagemErro] = useState(
     "Erro: Sistema atualizado recentemente. Por favor, verifique possíveis instabilidades."
   );
 
-  // Faz a mensagem sumir após 5 segundos
   useEffect(() => {
     const timer = setTimeout(() => {
-      setMensagemErro(""); // Limpa a mensagem
+      setMensagemErro("");
     }, 5000);
-
-    return () => clearTimeout(timer); // Limpa o timer se o componente desmontar
+    return () => clearTimeout(timer);
   }, []);
 
   const adicionarServico = () => {
@@ -56,11 +57,18 @@ function App() {
       alert("Preencha nome do cliente, data e adicione pelo menos um serviço.");
       return;
     }
+
+    // Salva o orçamento finalizado na lista
+    setOrcamentos([
+      ...orcamentos,
+      { cliente, data, servicos, id: Date.now() },
+    ]);
+
     setOrcamentoFinalizado(true);
   };
 
-  const apagarOrcamento = () => {
-    // Limpa todos os dados para apagar o orçamento
+  // Limpa os campos para iniciar um novo orçamento, sem apagar os orçamentos salvos
+  const novoOrcamento = () => {
     setCliente("");
     setData("");
     setServicos([]);
@@ -71,7 +79,6 @@ function App() {
 
   return (
     <div style={estilos.container}>
-      {/* Alerta de erro no topo */}
       {mensagemErro && (
         <div
           style={{
@@ -217,14 +224,6 @@ function App() {
             </Button>
 
             <Button
-              onClick={apagarOrcamento}
-              color="#dc3545"
-              style={{ flex: 1 }}
-            >
-              Apagar Orçamento
-            </Button>
-
-            <Button
               onClick={() => gerarPDF(cliente, data, servicos)}
               color="#007bff"
               style={{ flex: 1 }}
@@ -232,7 +231,70 @@ function App() {
               Gerar PDF
             </Button>
           </div>
+
+          <div style={{ marginTop: 20 }}>
+            <Button
+              onClick={novoOrcamento}
+              color="#28a745"
+              style={{ width: 200, marginTop: 10 }}
+            >
+              Novo Orçamento
+            </Button>
+          </div>
         </>
+      )}
+
+      {/* Lista dos orçamentos finalizados */}
+      {orcamentos.length > 0 && (
+        <div style={{ marginTop: 40 }}>
+          <h2>Orçamentos Salvos</h2>
+          {orcamentos.map((o) => (
+            <div
+              key={o.id}
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: 8,
+                padding: 15,
+                marginBottom: 15,
+                backgroundColor: "#f9f9f9",
+              }}
+            >
+              <p><strong>Cliente:</strong> {o.cliente}</p>
+              <p><strong>Data:</strong> {o.data}</p>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid #999" }}>
+                    <th style={{ textAlign: "left", padding: "8px" }}>Serviço</th>
+                    <th style={{ textAlign: "right", padding: "8px" }}>Preço (R$)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {o.servicos.map((s, i) => (
+                    <tr key={i} style={{ borderBottom: "1px solid #eee" }}>
+                      <td style={{ padding: "8px" }}>{s.servico}</td>
+                      <td style={{ padding: "8px", textAlign: "right" }}>
+                        {parseFloat(s.preco).toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p style={{ textAlign: "right", fontWeight: "bold", marginTop: 10 }}>
+                Total: R${" "}
+                {o.servicos.reduce((acc, cur) => acc + parseFloat(cur.preco), 0).toFixed(2)}
+              </p>
+
+              {/* Botão Gerar PDF para cada orçamento salvo */}
+              <Button
+                onClick={() => gerarPDF(o.cliente, o.data, o.servicos)}
+                color="#007bff"
+                style={{ marginTop: 10 }}
+              >
+                Gerar PDF
+              </Button>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
