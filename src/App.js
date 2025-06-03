@@ -13,8 +13,10 @@ function App() {
   const [servico, setServico] = useState("");
   const [preco, setPreco] = useState("");
   const [servicos, setServicos] = useState([]);
-
   const [orcamentoFinalizado, setOrcamentoFinalizado] = useState(false);
+
+  // Mensagem de erro (só para exibir no topo)
+  const [mensagemErro, setMensagemErro] = useState("Erro: Sistema atualizado recentemente. Por favor, verifique possíveis instabilidades.");
 
   const adicionarServico = () => {
     if (servico && preco) {
@@ -48,6 +50,22 @@ function App() {
 
   return (
     <div style={estilos.container}>
+      {/* Alerta de erro no topo */}
+      {mensagemErro && (
+        <div style={{
+          backgroundColor: "#ffcccc",
+          color: "#990000",
+          padding: "10px",
+          border: "1px solid #cc0000",
+          borderRadius: 5,
+          marginBottom: 15,
+          textAlign: "center",
+          fontWeight: "bold"
+        }}>
+          {mensagemErro}
+        </div>
+      )}
+
       <h1 style={estilos.titulo}>Orçamento Big Refrigeração</h1>
 
       <div style={estilos.inputLinha}>
@@ -96,15 +114,13 @@ function App() {
       </ul>
 
       {servicos.length > 0 && (
-        <>
-          <Button
-            onClick={finalizarOrcamento}
-            color="#dc3545"
-            style={{ marginBottom: 10 }}
-          >
-            Finalizar Orçamento
-          </Button>
-        </>
+        <Button
+          onClick={finalizarOrcamento}
+          color="#dc3545"
+          style={{ marginBottom: 10 }}
+        >
+          Finalizar Orçamento
+        </Button>
       )}
 
       {orcamentoFinalizado && (
