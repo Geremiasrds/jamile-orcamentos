@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+
+
+import gerarPDF from "./componets/GeradorPDF";
+import { estilos } from "./componets/Estilos"; 
+
 import Button from "./componets/Button";
 import InputField from "./componets/InputField";
 import ServicoItem from "./componets/ServicoItem";
@@ -31,41 +34,42 @@ function App() {
     removerServico(index);
   };
 
-  const gerarPDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.text("Orçamento - Big Refrigeração", 14, 22);
-    doc.setFontSize(12);
-    doc.text(`Cliente: ${cliente}`, 14, 32);
-    doc.text(`Data: ${data}`, 14, 40);
-
-    const rows = servicos.map((s, i) => [i + 1, s.servico, `R$ ${parseFloat(s.preco).toFixed(2)}`]);
-
-    autoTable(doc, {
-      startY: 50,
-      head: [["#", "Serviço", "Preço"]],
-      body: rows,
-    });
-
-    doc.save("orcamento.pdf");
-  };
-
   return (
-    <div style={{ padding: 30, fontFamily: "Arial" }}>
-      <h1 style={{ color: "#1e90ff" }}>Orçamento Big Refrigeração</h1>
+    <div style={estilos.container}>
+      <h1 style={estilos.titulo}>Orçamento Big Refrigeração</h1>
 
-      <div>
-        <InputField placeholder="Nome do Cliente" value={cliente} onChange={(e) => setCliente(e.target.value)} style={{ width: 250 }} />
-        <InputField type="date" value={data} onChange={(e) => setData(e.target.value)} />
+      <div style={estilos.inputLinha}>
+        <InputField
+          placeholder="Nome do Cliente"
+          value={cliente}
+          onChange={(e) => setCliente(e.target.value)}
+          style={{ width: 250 }}
+        />
+        <InputField
+          type="date"
+          value={data}
+          onChange={(e) => setData(e.target.value)}
+        />
       </div>
 
-      <div>
-        <InputField placeholder="Serviço" value={servico} onChange={(e) => setServico(e.target.value)} style={{ width: 250 }} />
-        <InputField type="number" placeholder="Preço" value={preco} onChange={(e) => setPreco(e.target.value)} style={{ width: 120 }} />
+      <div style={estilos.inputLinha}>
+        <InputField
+          placeholder="Serviço"
+          value={servico}
+          onChange={(e) => setServico(e.target.value)}
+          style={{ width: 250 }}
+        />
+        <InputField
+          type="number"
+          placeholder="Preço"
+          value={preco}
+          onChange={(e) => setPreco(e.target.value)}
+          style={{ width: 120 }}
+        />
         <Button onClick={adicionarServico} color="#28a745">Adicionar</Button>
       </div>
 
-      <ul style={{ listStyle: "none", padding: 0 }}>
+      <ul style={estilos.lista}>
         {servicos.map((s, i) => (
           <ServicoItem
             key={i}
@@ -78,7 +82,11 @@ function App() {
       </ul>
 
       {servicos.length > 0 && (
-        <Button onClick={gerarPDF} color="#007bff" style={{ marginTop: 20 }}>
+        <Button
+          onClick={() => gerarPDF(cliente, data, servicos)}
+          color="#007bff"
+          style={estilos.botaoGerar}
+        >
           Gerar PDF
         </Button>
       )}

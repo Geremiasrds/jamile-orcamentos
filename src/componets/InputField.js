@@ -1,15 +1,21 @@
 import React from "react";
 
-const InputField = ({ type = "text", placeholder, value, onChange, style }) => {
+function InputField({ type = "text", value, onChange, placeholder, style = {} }) {
   return (
     <input
       type={type}
-      placeholder={placeholder}
       value={value}
       onChange={onChange}
-      style={{ margin: 5, padding: 8, borderRadius: 4, border: "1px solid #ccc", ...style }}
+      placeholder={placeholder}
+      style={{
+        padding: "8px",
+        borderRadius: 4,
+        border: "1px solid #ccc",
+        marginRight: 8,
+        ...style,
+      }}
     />
   );
-};
+}
 
 export default InputField;

@@ -1,40 +1,20 @@
 import React from "react";
+import Button from "./Button";
 
-const ServicoItem = ({ servico, preco, onEditar, onRemover }) => {
+function ServicoItem({ servico, preco, onEditar, onRemover }) {
   return (
-    <li
-      style={{
-        backgroundColor: "#f9f9f9",
-        marginBottom: 10,
-        padding: 10,
-        borderRadius: 8,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <div>
+    <li style={{ marginBottom: 10 }}>
+      <span style={{ marginRight: 10 }}>
         <strong>{servico}</strong> - R$ {parseFloat(preco).toFixed(2)}
-      </div>
-      <div>
-        <button onClick={onEditar} style={{ marginRight: 10, padding: "4px 8px" }}>
-          Editar
-        </button>
-        <button
-          onClick={onRemover}
-          style={{
-            padding: "4px 8px",
-            backgroundColor: "#dc3545",
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-          }}
-        >
-          Remover
-        </button>
-      </div>
+      </span>
+      <Button onClick={onEditar} color="#ffc107" style={{ marginRight: 5 }}>
+        Editar
+      </Button>
+      <Button onClick={onRemover} color="#dc3545">
+        Remover
+      </Button>
     </li>
   );
-};
+}
 
 export default ServicoItem;
