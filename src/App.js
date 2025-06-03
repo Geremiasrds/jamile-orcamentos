@@ -16,7 +16,9 @@ function App() {
   const [orcamentoFinalizado, setOrcamentoFinalizado] = useState(false);
 
   // Mensagem de erro inicial
-  const [mensagemErro, setMensagemErro] = useState("Erro: Sistema atualizado recentemente. Por favor, verifique possíveis instabilidades.");
+  const [mensagemErro, setMensagemErro] = useState(
+    "Erro: Sistema atualizado recentemente. Por favor, verifique possíveis instabilidades."
+  );
 
   // Faz a mensagem sumir após 5 segundos
   useEffect(() => {
@@ -57,20 +59,32 @@ function App() {
     setOrcamentoFinalizado(true);
   };
 
+  const apagarOrcamento = () => {
+    // Limpa todos os dados para apagar o orçamento
+    setCliente("");
+    setData("");
+    setServicos([]);
+    setServico("");
+    setPreco("");
+    setOrcamentoFinalizado(false);
+  };
+
   return (
     <div style={estilos.container}>
       {/* Alerta de erro no topo */}
       {mensagemErro && (
-        <div style={{
-          backgroundColor: "#ffcccc",
-          color: "#990000",
-          padding: "10px",
-          border: "1px solid #cc0000",
-          borderRadius: 5,
-          marginBottom: 15,
-          textAlign: "center",
-          fontWeight: "bold"
-        }}>
+        <div
+          style={{
+            backgroundColor: "#ffcccc",
+            color: "#990000",
+            padding: "10px",
+            border: "1px solid #cc0000",
+            borderRadius: 5,
+            marginBottom: 15,
+            textAlign: "center",
+            fontWeight: "bold",
+          }}
+        >
           {mensagemErro}
         </div>
       )}
@@ -83,11 +97,13 @@ function App() {
           value={cliente}
           onChange={(e) => setCliente(e.target.value)}
           style={{ width: 250 }}
+          disabled={orcamentoFinalizado}
         />
         <InputField
           type="date"
           value={data}
           onChange={(e) => setData(e.target.value)}
+          disabled={orcamentoFinalizado}
         />
       </div>
 
@@ -97,6 +113,7 @@ function App() {
           value={servico}
           onChange={(e) => setServico(e.target.value)}
           style={{ width: 250 }}
+          disabled={orcamentoFinalizado}
         />
         <InputField
           type="number"
@@ -104,8 +121,9 @@ function App() {
           value={preco}
           onChange={(e) => setPreco(e.target.value)}
           style={{ width: 120 }}
+          disabled={orcamentoFinalizado}
         />
-        <Button onClick={adicionarServico} color="#28a745">
+        <Button onClick={adicionarServico} color="#28a745" disabled={orcamentoFinalizado}>
           Adicionar
         </Button>
       </div>
@@ -118,11 +136,12 @@ function App() {
             preco={s.preco}
             onEditar={() => editarServico(i)}
             onRemover={() => removerServico(i)}
+            disabled={orcamentoFinalizado}
           />
         ))}
       </ul>
 
-      {servicos.length > 0 && (
+      {!orcamentoFinalizado && servicos.length > 0 && (
         <Button
           onClick={finalizarOrcamento}
           color="#dc3545"
@@ -188,13 +207,31 @@ function App() {
             </p>
           </div>
 
-          <Button
-            onClick={() => gerarPDF(cliente, data, servicos)}
-            color="#007bff"
-            style={{ ...estilos.botaoGerar, marginTop: 20 }}
-          >
-            Gerar PDF
-          </Button>
+          <div style={{ marginTop: 20, display: "flex", gap: "10px" }}>
+            <Button
+              onClick={() => setOrcamentoFinalizado(false)}
+              color="#ffc107"
+              style={{ flex: 1 }}
+            >
+              Editar Orçamento
+            </Button>
+
+            <Button
+              onClick={apagarOrcamento}
+              color="#dc3545"
+              style={{ flex: 1 }}
+            >
+              Apagar Orçamento
+            </Button>
+
+            <Button
+              onClick={() => gerarPDF(cliente, data, servicos)}
+              color="#007bff"
+              style={{ flex: 1 }}
+            >
+              Gerar PDF
+            </Button>
+          </div>
         </>
       )}
     </div>
