@@ -4,11 +4,25 @@ import autoTable from "jspdf-autotable";
 /**
  * Gera e baixa um PDF com os dados fornecidos.
  * @param {string} cliente - Nome do cliente.
- * @param {string} data - Data do orçamento.
+ * @param {string|Date} data - Data do orçamento (string ou Date).
  * @param {Array} servicos - Lista de serviços com nome e preço.
  */
 const gerarPDF = (cliente, data, servicos) => {
   const doc = new jsPDF();
+
+  // Formatar data para dd/mm/aaaa
+  const dataObj = data instanceof Date ? data : new Date(data);
+  const dia = String(dataObj.getDate()).padStart(2, "0");
+  const mes = String(dataObj.getMonth() + 1).padStart(2, "0");
+  const ano = dataObj.getFullYear();
+  const dataFormatada = `${dia}/${mes}/${ano}`;
+
+  // Pega a hora atual na hora da geração do PDF
+  const agora = new Date();
+  const hora = String(agora.getHours()).padStart(2, "0");
+  const minuto = String(agora.getMinutes()).padStart(2, "0");
+  const segundo = String(agora.getSeconds()).padStart(2, "0");
+  const horaFormatada = `${hora}:${minuto}:${segundo}`;
 
   // "Logo" textual azul no canto superior esquerdo
   doc.setFontSize(16);
@@ -27,12 +41,15 @@ const gerarPDF = (cliente, data, servicos) => {
   // Dados do cliente
   doc.setFontSize(12);
   doc.text(`Cliente: ${cliente}`, 14, 50);
-  doc.text(`Data: ${data}`, 14, 58);
+  doc.text(`Data: ${dataFormatada}  Hora: ${horaFormatada}`, 14, 58);
 
-  // Frase antes da tabela
+  // Calcular total antes do texto
+  const total = servicos.reduce((acc, s) => acc + parseFloat(s.preco), 0);
+
+  // Frase antes da tabela, com total no final do texto
   doc.setFontSize(12);
   doc.text(
-    `Recebo do Sr. ${cliente} o valor referente aos serviços abaixo:`,
+    `Recebo do Sr. ${cliente} o valor de R$ ${total.toFixed(2)} referente aos serviços abaixo:`,
     14,
     68
   );
@@ -43,8 +60,6 @@ const gerarPDF = (cliente, data, servicos) => {
     s.servico,
     `R$ ${parseFloat(s.preco).toFixed(2)}`
   ]);
-
-  const total = servicos.reduce((acc, s) => acc + parseFloat(s.preco), 0);
 
   autoTable(doc, {
     startY: 75,
