@@ -14,14 +14,18 @@ function App() {
   const [preco, setPreco] = useState("");
   const [servicos, setServicos] = useState([]);
   const [orcamentoFinalizado, setOrcamentoFinalizado] = useState(false);
-
   const [orcamentos, setOrcamentos] = useState([]);
-
   const [mensagemErro, setMensagemErro] = useState(
-    "Erro: Sistema atualizado recentemente. Por favor, verifique possíveis instabilidades."
+    " Sistema atualizado recentemente. Por favor, verifique possíveis instabilidades."
   );
 
-  // Carregar do localStorage ao iniciar
+  const [clienteErro, setClienteErro] = useState("");
+  const [dataErro, setDataErro] = useState("");
+  const [servicoErro, setServicoErro] = useState("");
+  const [precoErro, setPrecoErro] = useState("");
+
+  const [copiado, setCopiado] = useState(false);
+
   useEffect(() => {
     const dadosSalvos = localStorage.getItem("orcamentos");
     if (dadosSalvos) {
@@ -29,7 +33,6 @@ function App() {
     }
   }, []);
 
-  // Salvar no localStorage sempre que orcamentos for atualizado
   useEffect(() => {
     localStorage.setItem("orcamentos", JSON.stringify(orcamentos));
   }, [orcamentos]);
@@ -42,12 +45,28 @@ function App() {
   }, []);
 
   const adicionarServico = () => {
-    if (servico && preco) {
-      setServicos([...servicos, { servico, preco }]);
-      setServico("");
-      setPreco("");
-      setOrcamentoFinalizado(false);
+    let erro = false;
+
+    if (!servico) {
+      setServicoErro("Informe o nome do serviço.");
+      erro = true;
+    } else {
+      setServicoErro("");
     }
+
+    if (!preco || isNaN(preco)) {
+      setPrecoErro("Informe um preço válido.");
+      erro = true;
+    } else {
+      setPrecoErro("");
+    }
+
+    if (erro) return;
+
+    setServicos([...servicos, { servico, preco }]);
+    setServico("");
+    setPreco("");
+    setOrcamentoFinalizado(false);
   };
 
   const removerServico = (index) => {
@@ -64,10 +83,30 @@ function App() {
   };
 
   const finalizarOrcamento = () => {
-    if (!cliente || !data || servicos.length === 0) {
-      alert("Preencha nome do cliente, data e adicione pelo menos um serviço.");
-      return;
+    let erro = false;
+
+    if (!cliente) {
+      setClienteErro("Nome do cliente é obrigatório.");
+      erro = true;
+    } else {
+      setClienteErro("");
     }
+
+    if (!data) {
+      setDataErro("Data é obrigatória.");
+      erro = true;
+    } else {
+      setDataErro("");
+    }
+
+    if (servicos.length === 0) {
+      setServicoErro("Adicione pelo menos um serviço.");
+      erro = true;
+    } else if (!servico) {
+      setServicoErro("");
+    }
+
+    if (erro) return;
 
     setOrcamentos([
       ...orcamentos,
@@ -84,6 +123,81 @@ function App() {
     setServico("");
     setPreco("");
     setOrcamentoFinalizado(false);
+    setClienteErro("");
+    setDataErro("");
+    setServicoErro("");
+    setPrecoErro("");
+    setCopiado(false);
+  };
+
+  const copiarOrcamento = () => {
+    const texto = `
+Cliente: ${cliente}
+Data: ${formatarData(data)}
+
+Recebo do Sr. ${cliente} o valor referente aos serviços abaixo:
+
+${servicos
+      .map((s) => `- ${s.servico}: R$ ${parseFloat(s.preco).toFixed(2)}`)
+      .join("\n")}
+
+Total: R$ ${servicos
+        .reduce((acc, cur) => acc + parseFloat(cur.preco), 0)
+        .toFixed(2)}
+    `;
+
+    navigator.clipboard.writeText(texto.trim()).then(() => {
+      setCopiado(true);
+      setTimeout(() => setCopiado(false), 2000);
+    });
+  };
+
+  // Copiar orçamento salvo
+  const copiarOrcamentoSalvo = (orc) => {
+    const texto = `
+Cliente: ${orc.cliente}
+Data: ${formatarData(orc.data)}
+
+Recebo do Sr. ${orc.cliente} o valor referente aos serviços abaixo:
+
+${orc.servicos
+      .map((s) => `- ${s.servico}: R$ ${parseFloat(s.preco).toFixed(2)}`)
+      .join("\n")}
+
+Total: R$ ${orc.servicos
+        .reduce((acc, cur) => acc + parseFloat(cur.preco), 0)
+        .toFixed(2)}
+    `;
+
+    navigator.clipboard.writeText(texto.trim());
+    alert("Orçamento copiado!");
+  };
+
+  // Editar orçamento salvo
+  const editarOrcamento = (id) => {
+    const orc = orcamentos.find((o) => o.id === id);
+    if (!orc) return;
+
+    setCliente(orc.cliente);
+    setData(orc.data);
+    setServicos(orc.servicos);
+    setOrcamentoFinalizado(false);
+
+    setOrcamentos(orcamentos.filter((o) => o.id !== id));
+  };
+
+  // Excluir orçamento salvo
+  const excluirOrcamento = (id) => {
+    if (window.confirm("Tem certeza que deseja excluir este orçamento?")) {
+      setOrcamentos(orcamentos.filter((o) => o.id !== id));
+    }
+  };
+
+  // Formatar data yyyy-mm-dd para dd/mm/yyyy
+  const formatarData = (dataString) => {
+    if (!dataString) return "";
+    const [ano, mes, dia] = dataString.split("-");
+    return `${dia}/${mes}/${ano}`;
   };
 
   return (
@@ -108,37 +222,60 @@ function App() {
       <h1 style={estilos.titulo}>Orçamento Big Refrigeração</h1>
 
       <div style={estilos.inputLinha}>
-        <InputField
-          placeholder="Nome do Cliente"
-          value={cliente}
-          onChange={(e) => setCliente(e.target.value)}
-          style={{ width: 250 }}
-          disabled={orcamentoFinalizado}
-        />
-        <InputField
-          type="date"
-          value={data}
-          onChange={(e) => setData(e.target.value)}
-          disabled={orcamentoFinalizado}
-        />
+        <div>
+          <InputField
+            placeholder="Nome do Cliente"
+            value={cliente}
+            onChange={(e) => setCliente(e.target.value)}
+            style={{ width: 250 }}
+            disabled={orcamentoFinalizado}
+          />
+          {clienteErro && (
+            <div style={{ color: "red", fontSize: "0.9em" }}>{clienteErro}</div>
+          )}
+        </div>
+
+        <div>
+          <InputField
+            type="date"
+            value={data}
+            onChange={(e) => setData(e.target.value)}
+            disabled={orcamentoFinalizado}
+          />
+          {dataErro && (
+            <div style={{ color: "red", fontSize: "0.9em" }}>{dataErro}</div>
+          )}
+        </div>
       </div>
 
       <div style={estilos.inputLinha}>
-        <InputField
-          placeholder="Serviço"
-          value={servico}
-          onChange={(e) => setServico(e.target.value)}
-          style={{ width: 250 }}
-          disabled={orcamentoFinalizado}
-        />
-        <InputField
-          type="number"
-          placeholder="Preço"
-          value={preco}
-          onChange={(e) => setPreco(e.target.value)}
-          style={{ width: 120 }}
-          disabled={orcamentoFinalizado}
-        />
+        <div>
+          <InputField
+            placeholder="Serviço"
+            value={servico}
+            onChange={(e) => setServico(e.target.value)}
+            style={{ width: 250 }}
+            disabled={orcamentoFinalizado}
+          />
+          {servicoErro && (
+            <div style={{ color: "red", fontSize: "0.9em" }}>{servicoErro}</div>
+          )}
+        </div>
+
+        <div>
+          <InputField
+            type="number"
+            placeholder="Preço"
+            value={preco}
+            onChange={(e) => setPreco(e.target.value)}
+            style={{ width: 120 }}
+            disabled={orcamentoFinalizado}
+          />
+          {precoErro && (
+            <div style={{ color: "red", fontSize: "0.9em" }}>{precoErro}</div>
+          )}
+        </div>
+
         <Button
           onClick={adicionarServico}
           color="#28a745"
@@ -186,7 +323,7 @@ function App() {
           >
             <h2 style={{ textAlign: "center" }}>Orçamento Finalizado</h2>
             <p><strong>Cliente:</strong> {cliente}</p>
-            <p><strong>Data:</strong> {data}</p>
+            <p><strong>Data:</strong> {formatarData(data)}</p>
 
             <p style={{ marginTop: 20, fontWeight: "bold" }}>
               Recebo do Sr. {cliente} o valor referente aos serviços abaixo:
@@ -217,36 +354,34 @@ function App() {
             </p>
           </div>
 
-          <div style={{ marginTop: 20, display: "flex", gap: "10px" }}>
-            <Button
-              onClick={() => setOrcamentoFinalizado(false)}
-              color="#ffc107"
-              style={{ flex: 1 }}
-            >
-              Editar Orçamento
-            </Button>
-
-            <Button
-              onClick={() => gerarPDF(cliente, data, servicos)}
-              color="#007bff"
-              style={{ flex: 1 }}
-            >
+          <div
+            style={{
+              marginTop: 20,
+              display: "flex",
+              gap: "15px",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <Button onClick={() => gerarPDF(cliente, data, servicos)} color="#007bff">
               Gerar PDF
             </Button>
-          </div>
 
-          <div style={{ marginTop: 20 }}>
             <Button
-              onClick={novoOrcamento}
-              color="#28a745"
-              style={{ width: 200, marginTop: 10 }}
+              onClick={copiarOrcamento}
+              color={copiado ? "#28a745" : "#6c757d"}
             >
+              {copiado ? "Orçamento copiado!" : "Copiar Orçamento"}
+            </Button>
+
+            <Button onClick={novoOrcamento} color="#ffc107">
               Novo Orçamento
             </Button>
           </div>
         </>
       )}
 
+      {/* Lista de orçamentos salvos */}
       {orcamentos.length > 0 && (
         <div style={{ marginTop: 40 }}>
           <h2>Orçamentos Salvos</h2>
@@ -262,7 +397,7 @@ function App() {
               }}
             >
               <p><strong>Cliente:</strong> {o.cliente}</p>
-              <p><strong>Data:</strong> {o.data}</p>
+              <p><strong>Data:</strong> {formatarData(o.data)}</p>
               <p style={{ marginTop: 20, fontWeight: "bold" }}>
                 Recebo do Sr. {o.cliente} o valor referente aos serviços abaixo:
               </p>
@@ -289,13 +424,39 @@ function App() {
                 {o.servicos.reduce((acc, cur) => acc + parseFloat(cur.preco), 0).toFixed(2)}
               </p>
 
-              <Button
-                onClick={() => gerarPDF(o.cliente, o.data, o.servicos)}
-                color="#007bff"
-                style={{ marginTop: 10 }}
-              >
-                Gerar PDF
-              </Button>
+              <div style={{ marginTop: 15, display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                <Button
+                  onClick={() => editarOrcamento(o.id)}
+                  color="#ffc107"
+                  style={{ flex: 1 }}
+                >
+                  Editar
+                </Button>
+
+                <Button
+                  onClick={() => excluirOrcamento(o.id)}
+                  color="#dc3545"
+                  style={{ flex: 1 }}
+                >
+                  Excluir
+                </Button>
+
+                <Button
+                  onClick={() => gerarPDF(o.cliente, o.data, o.servicos)}
+                  color="#007bff"
+                  style={{ flex: 1 }}
+                >
+                  Gerar PDF
+                </Button>
+
+                <Button
+                  onClick={() => copiarOrcamentoSalvo(o)}
+                  color="#6c757d"
+                  style={{ flex: 1, fontSize: 12, padding: "6px 8px" }}
+                >
+                  Copiar Orçamento
+                </Button>
+              </div>
             </div>
           ))}
         </div>
