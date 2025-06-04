@@ -16,7 +16,7 @@ function App() {
   const [orcamentoFinalizado, setOrcamentoFinalizado] = useState(false);
   const [orcamentos, setOrcamentos] = useState([]);
   const [mensagemErro, setMensagemErro] = useState(
-    " Sistema atualizado recentemente. Por favor, verifique possíveis instabilidades."
+    " Sistema atualizado recentemente."
   );
   const [orcamentoCopiadoId, setOrcamentoCopiadoId] = useState(null);
 
@@ -175,7 +175,6 @@ Total: R$ ${orc.servicos
       setTimeout(() => setOrcamentoCopiadoId(null), 2000);
     });
   };
-
 
   const editarOrcamento = (id) => {
     const orc = orcamentos.find((o) => o.id === id);
@@ -431,18 +430,25 @@ Total: R$ ${orc.servicos
                   display: "flex",
                   gap: "10px",
                   justifyContent: "flex-end",
+                  flexWrap: "wrap",
                 }}
               >
+                {/* Botão GERAR PDF para cada orçamento salvo */}
+                <Button onClick={() => gerarPDF(o.cliente, o.data, o.servicos)} color="#007bff">
+                  Gerar PDF
+                </Button>
+
                 <Button
                   onClick={() => copiarOrcamentoSalvo(o)}
-                  color="#6c757d"
+                  color="blue"
                 >
                   {orcamentoCopiadoId === o.id ? "Orçamento copiado!" : "Copiar"}
                 </Button>
 
-                <Button onClick={() => editarOrcamento(o.id)} color="#17a2b8">
+                <Button onClick={() => editarOrcamento(o.id)} color="#ffc107">
                   Editar
                 </Button>
+
                 <Button onClick={() => excluirOrcamento(o.id)} color="#dc3545">
                   Excluir
                 </Button>
