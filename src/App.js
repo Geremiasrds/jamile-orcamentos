@@ -18,6 +18,7 @@ function App() {
   const [mensagemErro, setMensagemErro] = useState(
     " Sistema atualizado recentemente. Por favor, verifique possíveis instabilidades."
   );
+  const [orcamentoCopiadoId, setOrcamentoCopiadoId] = useState(null);
 
   const [clienteErro, setClienteErro] = useState("");
   const [dataErro, setDataErro] = useState("");
@@ -138,8 +139,8 @@ Data: ${formatarData(data)}
 Recebo do Sr. ${cliente} o valor referente aos serviços abaixo:
 
 ${servicos
-      .map((s) => `- ${s.servico}: R$ ${parseFloat(s.preco).toFixed(2)}`)
-      .join("\n")}
+        .map((s) => `- ${s.servico}: R$ ${parseFloat(s.preco).toFixed(2)}`)
+        .join("\n")}
 
 Total: R$ ${servicos
         .reduce((acc, cur) => acc + parseFloat(cur.preco), 0)
@@ -152,7 +153,7 @@ Total: R$ ${servicos
     });
   };
 
-  // Copiar orçamento salvo
+  // Copiar orçamento salvo (mantendo alert, pois não foi pedido mudar)
   const copiarOrcamentoSalvo = (orc) => {
     const texto = `
 Cliente: ${orc.cliente}
@@ -161,19 +162,21 @@ Data: ${formatarData(orc.data)}
 Recebo do Sr. ${orc.cliente} o valor referente aos serviços abaixo:
 
 ${orc.servicos
-      .map((s) => `- ${s.servico}: R$ ${parseFloat(s.preco).toFixed(2)}`)
-      .join("\n")}
+        .map((s) => `- ${s.servico}: R$ ${parseFloat(s.preco).toFixed(2)}`)
+        .join("\n")}
 
 Total: R$ ${orc.servicos
         .reduce((acc, cur) => acc + parseFloat(cur.preco), 0)
         .toFixed(2)}
-    `;
+  `;
 
-    navigator.clipboard.writeText(texto.trim());
-    alert("Orçamento copiado!");
+    navigator.clipboard.writeText(texto.trim()).then(() => {
+      setOrcamentoCopiadoId(orc.id);
+      setTimeout(() => setOrcamentoCopiadoId(null), 2000);
+    });
   };
 
-  // Editar orçamento salvo
+
   const editarOrcamento = (id) => {
     const orc = orcamentos.find((o) => o.id === id);
     if (!orc) return;
@@ -186,14 +189,12 @@ Total: R$ ${orc.servicos
     setOrcamentos(orcamentos.filter((o) => o.id !== id));
   };
 
-  // Excluir orçamento salvo
   const excluirOrcamento = (id) => {
     if (window.confirm("Tem certeza que deseja excluir este orçamento?")) {
       setOrcamentos(orcamentos.filter((o) => o.id !== id));
     }
   };
 
-  // Formatar data yyyy-mm-dd para dd/mm/yyyy
   const formatarData = (dataString) => {
     if (!dataString) return "";
     const [ano, mes, dia] = dataString.split("-");
@@ -424,37 +425,26 @@ Total: R$ ${orc.servicos
                 {o.servicos.reduce((acc, cur) => acc + parseFloat(cur.preco), 0).toFixed(2)}
               </p>
 
-              <div style={{ marginTop: 15, display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                <Button
-                  onClick={() => editarOrcamento(o.id)}
-                  color="#ffc107"
-                  style={{ flex: 1 }}
-                >
-                  Editar
-                </Button>
-
-                <Button
-                  onClick={() => excluirOrcamento(o.id)}
-                  color="#dc3545"
-                  style={{ flex: 1 }}
-                >
-                  Excluir
-                </Button>
-
-                <Button
-                  onClick={() => gerarPDF(o.cliente, o.data, o.servicos)}
-                  color="#007bff"
-                  style={{ flex: 1 }}
-                >
-                  Gerar PDF
-                </Button>
-
+              <div
+                style={{
+                  marginTop: 10,
+                  display: "flex",
+                  gap: "10px",
+                  justifyContent: "flex-end",
+                }}
+              >
                 <Button
                   onClick={() => copiarOrcamentoSalvo(o)}
                   color="#6c757d"
-                  style={{ flex: 1, fontSize: 12, padding: "6px 8px" }}
                 >
-                  Copiar Orçamento
+                  {orcamentoCopiadoId === o.id ? "Orçamento copiado!" : "Copiar"}
+                </Button>
+
+                <Button onClick={() => editarOrcamento(o.id)} color="#17a2b8">
+                  Editar
+                </Button>
+                <Button onClick={() => excluirOrcamento(o.id)} color="#dc3545">
+                  Excluir
                 </Button>
               </div>
             </div>
