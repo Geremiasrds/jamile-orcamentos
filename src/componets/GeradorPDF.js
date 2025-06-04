@@ -22,7 +22,7 @@ const gerarPDF = (cliente, data, servicos) => {
   // Título principal
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(18);
-  doc.text("Orçamento - Big Refrigeração", 80, 22);
+  doc.text("BIG REFRIGERAÇÃO", 90, 22);
 
   // Dados do cliente
   doc.setFontSize(12);

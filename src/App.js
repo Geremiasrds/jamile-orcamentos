@@ -15,13 +15,24 @@ function App() {
   const [servicos, setServicos] = useState([]);
   const [orcamentoFinalizado, setOrcamentoFinalizado] = useState(false);
 
-  // Lista de orçamentos finalizados
   const [orcamentos, setOrcamentos] = useState([]);
 
-  // Mensagem de erro inicial
   const [mensagemErro, setMensagemErro] = useState(
     "Erro: Sistema atualizado recentemente. Por favor, verifique possíveis instabilidades."
   );
+
+  // Carregar do localStorage ao iniciar
+  useEffect(() => {
+    const dadosSalvos = localStorage.getItem("orcamentos");
+    if (dadosSalvos) {
+      setOrcamentos(JSON.parse(dadosSalvos));
+    }
+  }, []);
+
+  // Salvar no localStorage sempre que orcamentos for atualizado
+  useEffect(() => {
+    localStorage.setItem("orcamentos", JSON.stringify(orcamentos));
+  }, [orcamentos]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -174,12 +185,8 @@ function App() {
             }}
           >
             <h2 style={{ textAlign: "center" }}>Orçamento Finalizado</h2>
-            <p>
-              <strong>Cliente:</strong> {cliente}
-            </p>
-            <p>
-              <strong>Data:</strong> {data}
-            </p>
+            <p><strong>Cliente:</strong> {cliente}</p>
+            <p><strong>Data:</strong> {data}</p>
 
             <p style={{ marginTop: 20, fontWeight: "bold" }}>
               Recebo do Sr. {cliente} o valor referente aos serviços abaixo:
@@ -204,17 +211,9 @@ function App() {
               </tbody>
             </table>
 
-            <p
-              style={{
-                textAlign: "right",
-                fontWeight: "bold",
-                marginTop: 10,
-              }}
-            >
+            <p style={{ textAlign: "right", fontWeight: "bold", marginTop: 10 }}>
               Total: R${" "}
-              {servicos
-                .reduce((acc, cur) => acc + parseFloat(cur.preco), 0)
-                .toFixed(2)}
+              {servicos.reduce((acc, cur) => acc + parseFloat(cur.preco), 0).toFixed(2)}
             </p>
           </div>
 
@@ -262,12 +261,8 @@ function App() {
                 backgroundColor: "#f9f9f9",
               }}
             >
-              <p>
-                <strong>Cliente:</strong> {o.cliente}
-              </p>
-              <p>
-                <strong>Data:</strong> {o.data}
-              </p>
+              <p><strong>Cliente:</strong> {o.cliente}</p>
+              <p><strong>Data:</strong> {o.data}</p>
               <p style={{ marginTop: 20, fontWeight: "bold" }}>
                 Recebo do Sr. {o.cliente} o valor referente aos serviços abaixo:
               </p>
@@ -275,9 +270,7 @@ function App() {
                 <thead>
                   <tr style={{ borderBottom: "1px solid #999" }}>
                     <th style={{ textAlign: "left", padding: "8px" }}>Serviço</th>
-                    <th style={{ textAlign: "right", padding: "8px" }}>
-                      Preço (R$)
-                    </th>
+                    <th style={{ textAlign: "right", padding: "8px" }}>Preço (R$)</th>
                   </tr>
                 </thead>
                 <tbody>
