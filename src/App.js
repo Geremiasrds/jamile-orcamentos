@@ -58,7 +58,6 @@ function App() {
       return;
     }
 
-    // Salva o orçamento finalizado na lista
     setOrcamentos([
       ...orcamentos,
       { cliente, data, servicos, id: Date.now() },
@@ -67,7 +66,6 @@ function App() {
     setOrcamentoFinalizado(true);
   };
 
-  // Limpa os campos para iniciar um novo orçamento, sem apagar os orçamentos salvos
   const novoOrcamento = () => {
     setCliente("");
     setData("");
@@ -130,7 +128,11 @@ function App() {
           style={{ width: 120 }}
           disabled={orcamentoFinalizado}
         />
-        <Button onClick={adicionarServico} color="#28a745" disabled={orcamentoFinalizado}>
+        <Button
+          onClick={adicionarServico}
+          color="#28a745"
+          disabled={orcamentoFinalizado}
+        >
           Adicionar
         </Button>
       </div>
@@ -179,13 +181,15 @@ function App() {
               <strong>Data:</strong> {data}
             </p>
 
+            <p style={{ marginTop: 20, fontWeight: "bold" }}>
+              Recebo do Sr. {cliente} o valor referente aos serviços abaixo:
+            </p>
+
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid #999" }}>
                   <th style={{ textAlign: "left", padding: "8px" }}>Serviço</th>
-                  <th style={{ textAlign: "right", padding: "8px" }}>
-                    Preço (R$)
-                  </th>
+                  <th style={{ textAlign: "right", padding: "8px" }}>Preço (R$)</th>
                 </tr>
               </thead>
               <tbody>
@@ -244,7 +248,6 @@ function App() {
         </>
       )}
 
-      {/* Lista dos orçamentos finalizados */}
       {orcamentos.length > 0 && (
         <div style={{ marginTop: 40 }}>
           <h2>Orçamentos Salvos</h2>
@@ -259,13 +262,22 @@ function App() {
                 backgroundColor: "#f9f9f9",
               }}
             >
-              <p><strong>Cliente:</strong> {o.cliente}</p>
-              <p><strong>Data:</strong> {o.data}</p>
+              <p>
+                <strong>Cliente:</strong> {o.cliente}
+              </p>
+              <p>
+                <strong>Data:</strong> {o.data}
+              </p>
+              <p style={{ marginTop: 20, fontWeight: "bold" }}>
+                Recebo do Sr. {o.cliente} o valor referente aos serviços abaixo:
+              </p>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                   <tr style={{ borderBottom: "1px solid #999" }}>
                     <th style={{ textAlign: "left", padding: "8px" }}>Serviço</th>
-                    <th style={{ textAlign: "right", padding: "8px" }}>Preço (R$)</th>
+                    <th style={{ textAlign: "right", padding: "8px" }}>
+                      Preço (R$)
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -284,7 +296,6 @@ function App() {
                 {o.servicos.reduce((acc, cur) => acc + parseFloat(cur.preco), 0).toFixed(2)}
               </p>
 
-              {/* Botão Gerar PDF para cada orçamento salvo */}
               <Button
                 onClick={() => gerarPDF(o.cliente, o.data, o.servicos)}
                 color="#007bff"
