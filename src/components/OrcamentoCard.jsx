@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import gerarPDF from "../utils/gerarPDF";
 import {
   Card,
@@ -12,12 +12,20 @@ import {
 const OrcamentoCard = ({ orcamento, onExcluir, onEditar }) => {
   const [copiado, setCopiado] = useState(false);
 
-  // Cálculo total com validação dos valores
+  // Recupera o número salvo no localStorage ao carregar o componente
+  const [numeroCliente, setNumeroCliente] = useState(() => {
+    return localStorage.getItem(`numero-${orcamento.id}`) || "";
+  });
+
+  // Atualiza o localStorage sempre que o número mudar
+  useEffect(() => {
+    localStorage.setItem(`numero-${orcamento.id}`, numeroCliente);
+  }, [numeroCliente, orcamento.id]);
+
   const total = orcamento.servicos
     .reduce((acc, s) => acc + (Number(s.qtd) || 0) * (Number(s.valorUnitario) || 0), 0)
     .toFixed(2);
 
-  // Formatação da data e hora
   const data = new Date(orcamento.data).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -28,7 +36,6 @@ const OrcamentoCard = ({ orcamento, onExcluir, onEditar }) => {
     minute: "2-digit",
   });
 
-  // Função para copiar o orçamento para a área de transferência
   const copiarOrcamento = () => {
     const texto = `
 BIG REFRIGERAÇÃO
@@ -57,21 +64,49 @@ ${orcamento.servicos
     setTimeout(() => setCopiado(false), 2000);
   };
 
-  // Função para gerar o PDF
   const baixarPDF = () => {
     gerarPDF(orcamento.cliente, orcamento.data, orcamento.servicos);
   };
 
-  // Função para excluir o orçamento
   const excluirOrcamento = () => {
     onExcluir(orcamento);
   };
 
-  // Função para editar o orçamento
   const editarOrcamento = () => {
     if (onEditar) {
       onEditar(orcamento);
     }
+  };
+
+  const enviarParaWhatsApp = () => {
+    if (!numeroCliente) return alert("Digite o número do cliente!");
+
+    const mensagem = `
+BIG REFRIGERAÇÃO
+
+Cliente: ${orcamento.cliente}
+Data: ${data}
+Hora: ${hora}
+
+Recebo do Sr(a) ${orcamento.cliente} o valor total de R$ ${total} referente aos serviços abaixo:
+
+${orcamento.servicos
+  .map((s) => {
+    const qtd = Number(s.qtd) || 0;
+    const valor = Number(s.valorUnitario) || 0;
+    const subtotal = qtd * valor;
+    return `${s.servico} - Qtd: ${qtd}, Unitário: R$ ${valor.toFixed(
+      2
+    )}, Subtotal: R$ ${subtotal.toFixed(2)}`;
+  })
+  .join("\n")}
+
+Total: R$ ${total}
+    `;
+
+    const numero = numeroCliente.replace(/\D/g, "");
+    const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, "_blank");
   };
 
   return (
@@ -148,6 +183,37 @@ ${orcamento.servicos
         <p style={{ marginTop: "12px", fontWeight: "bold", fontSize: "1.1rem" }}>
           Total: R$ {total}
         </p>
+
+        {/* Campo de número e botão pequeno do WhatsApp */}
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "16px" }}>
+          <input
+            type="tel"
+            placeholder="WhatsApp"
+            value={numeroCliente}
+            onChange={(e) => setNumeroCliente(e.target.value)}
+            style={{
+              padding: "4px 6px",
+              borderRadius: "6px",
+              border: "1px solid #ccc",
+              width: "140px",
+              fontSize: "0.85rem",
+            }}
+          />
+          <button
+            onClick={enviarParaWhatsApp}
+            style={{
+              backgroundColor: "#25d366",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              padding: "4px 6px",
+              fontSize: "0.7rem",
+              cursor: "pointer",
+            }}
+          >
+            Whats
+          </button>
+        </div>
 
         <ButtonGroup>
           <Button onClick={copiarOrcamento}>
