@@ -2,7 +2,7 @@
   "name": "orcamento-big-refrigeracao",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://Geremiasrds.github.io/jamile-orcamentos",
+  "homepage": "https://geremiasrds.github.io/jamile-orcamentos",
   "dependencies": {
     "html2pdf.js": "^0.10.3",
     "jspdf": "^2.5.2",
