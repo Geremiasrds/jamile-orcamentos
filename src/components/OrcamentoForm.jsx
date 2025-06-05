@@ -35,13 +35,13 @@ const OrcamentoForm = ({ cliente, setCliente, servicos, setServicos, onSalvar })
           />
           <input
             type="number"
-            placeholder="Qtd"
+            placeholder="Quantidade"
             value={s.qtd}
             onChange={(e) => atualizarServico(i, "qtd", e.target.value)}
           />
           <input
             type="number"
-            placeholder="Valor Unitário"
+            placeholder="Valor unitario do serviço"
             value={s.valorUnitario}
             onChange={(e) => atualizarServico(i, "valorUnitario", e.target.value)}
           />

@@ -25,7 +25,7 @@ const ServicoForm = ({ adicionarServico, editandoServico }) => {
   return (
     <div>
       <Input placeholder="Serviço" value={servico} onChange={e => setServico(e.target.value)} />
-      <Input type="number" placeholder="Qtd" value={qtd} onChange={e => setQtd(e.target.value)} />
+      <Input type="number" placeholder="Quantidade" value={qtd} onChange={e => setQtd(e.target.value)} />
       <Input
         type="number"
         placeholder="Valor Unitário"
@@ -35,6 +35,7 @@ const ServicoForm = ({ adicionarServico, editandoServico }) => {
       <Button onClick={handleAdicionar}>
         {editandoServico ? "✏️ Atualizar Serviço" : "➕ Adicionar Serviço"}
       </Button>
+      
     </div>
   );
 };

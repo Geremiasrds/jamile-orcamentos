@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ClienteInput from "./components/ClienteInput";
 import ServicoForm from "./components/ServicoForm";
 import ListaServicos from "./components/ListaServicos";
@@ -6,41 +6,25 @@ import OrcamentoCard from "./components/OrcamentoCard";
 import { Container, Titulo, Button } from "./styles/StyledComponents";
 
 const App = () => {
-  // Carregar dados do localStorage
-  const [cliente, setCliente] = useState(localStorage.getItem("cliente") || "");
-  const [servicos, setServicos] = useState(() => {
-    const salvos = localStorage.getItem("servicos");
-    return salvos ? JSON.parse(salvos) : [];
-  });
-  const [orcamentos, setOrcamentos] = useState(() => {
-    const salvos = localStorage.getItem("orcamentos");
-    return salvos ? JSON.parse(salvos) : [];
-  });
-
+  const [cliente, setCliente] = useState("");
+  const [servicos, setServicos] = useState([]);
+  const [orcamentos, setOrcamentos] = useState([]);
   const [editandoServicoIndex, setEditandoServicoIndex] = useState(null);
 
-  // Salvar no localStorage sempre que mudar
-  useEffect(() => {
-    localStorage.setItem("cliente", cliente);
-  }, [cliente]);
-
-  useEffect(() => {
-    localStorage.setItem("servicos", JSON.stringify(servicos));
-  }, [servicos]);
-
-  useEffect(() => {
-    localStorage.setItem("orcamentos", JSON.stringify(orcamentos));
-  }, [orcamentos]);
+  // Estado para controlar visibilidade do botão "Adicionar Orçamento"
+  const [mostrarBotaoAddOrcamento, setMostrarBotaoAddOrcamento] = useState(false);
 
   const adicionarServico = (novoServico) => {
     if (editandoServicoIndex !== null) {
-      const novos = [...servicos];
-      novos[editandoServicoIndex] = novoServico;
-      setServicos(novos);
+      const novosServicos = [...servicos];
+      novosServicos[editandoServicoIndex] = novoServico;
+      setServicos(novosServicos);
       setEditandoServicoIndex(null);
     } else {
       setServicos([...servicos, novoServico]);
     }
+    // Exibe botão ao adicionar um serviço
+    setMostrarBotaoAddOrcamento(true);
   };
 
   const editarServico = (index) => {
@@ -51,16 +35,17 @@ const App = () => {
     const novos = servicos.filter((_, i) => i !== index);
     setServicos(novos);
     if (editandoServicoIndex === index) setEditandoServicoIndex(null);
+    // Se não houver mais serviços, esconder botão "Adicionar Orçamento"
+    if (novos.length === 0) setMostrarBotaoAddOrcamento(false);
   };
 
   const adicionarOrcamento = () => {
     if (!cliente || servicos.length === 0) return;
-    const novo = { cliente, servicos, data: new Date() };
-    setOrcamentos([...orcamentos, novo]);
+    setOrcamentos([...orcamentos, { cliente, servicos, data: new Date() }]);
     setCliente("");
     setServicos([]);
-    localStorage.removeItem("cliente");
-    localStorage.removeItem("servicos");
+    // Esconder o botão após adicionar o orçamento
+    setMostrarBotaoAddOrcamento(false);
   };
 
   const excluirOrcamento = (orc) => {
@@ -71,6 +56,8 @@ const App = () => {
     setCliente(orc.cliente);
     setServicos(orc.servicos);
     setOrcamentos(orcamentos.filter(o => o !== orc));
+    // Mostrar botão para atualizar orçamento editado
+    setMostrarBotaoAddOrcamento(true);
   };
 
   return (
@@ -90,7 +77,9 @@ const App = () => {
         onExcluir={excluirServico}
       />
 
-      <Button onClick={adicionarOrcamento}>➕ Adicionar Orçamento</Button>
+      {mostrarBotaoAddOrcamento && (
+        <Button onClick={adicionarOrcamento}>➕ Adicionar Orçamento</Button>
+      )}
 
       {orcamentos.map((orc, index) => (
         <OrcamentoCard
