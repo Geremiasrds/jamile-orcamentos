@@ -12,10 +12,12 @@ import {
 const OrcamentoCard = ({ orcamento, onExcluir, onEditar }) => {
   const [copiado, setCopiado] = useState(false);
 
+  // Cálculo total com validação dos valores
   const total = orcamento.servicos
-    .reduce((acc, s) => acc + s.qtd * s.valorUnitario, 0)
+    .reduce((acc, s) => acc + (Number(s.qtd) || 0) * (Number(s.valorUnitario) || 0), 0)
     .toFixed(2);
 
+  // Formatação da data e hora
   const data = new Date(orcamento.data).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -26,6 +28,7 @@ const OrcamentoCard = ({ orcamento, onExcluir, onEditar }) => {
     minute: "2-digit",
   });
 
+  // Função para copiar o orçamento para a área de transferência
   const copiarOrcamento = () => {
     const texto = `
 BIG REFRIGERAÇÃO
@@ -38,12 +41,14 @@ Recebo do Sr(a) ${orcamento.cliente} o valor total de R$ ${total} referente aos 
 
 Detalhes dos serviços:
 ${orcamento.servicos
-  .map(
-    (s) =>
-      `${s.servico} - Quantidade: ${s.qtd} - Valor Unitário: R$ ${s.valorUnitario.toFixed(
-        2
-      )} - Subtotal: R$ ${(s.qtd * s.valorUnitario).toFixed(2)}`
-  )
+  .map((s) => {
+    const qtd = Number(s.qtd) || 0;
+    const valor = Number(s.valorUnitario) || 0;
+    const subtotal = qtd * valor;
+    return `${s.servico} - Quantidade: ${qtd} - Valor Unitário: R$ ${valor.toFixed(
+      2
+    )} - Subtotal: R$ ${subtotal.toFixed(2)}`;
+  })
   .join("\n")}
 `;
 
@@ -52,14 +57,17 @@ ${orcamento.servicos
     setTimeout(() => setCopiado(false), 2000);
   };
 
+  // Função para gerar o PDF
   const baixarPDF = () => {
     gerarPDF(orcamento.cliente, orcamento.data, orcamento.servicos);
   };
 
+  // Função para excluir o orçamento
   const excluirOrcamento = () => {
     onExcluir(orcamento);
   };
 
+  // Função para editar o orçamento
   const editarOrcamento = () => {
     if (onEditar) {
       onEditar(orcamento);
@@ -116,18 +124,24 @@ ${orcamento.servicos
             </tr>
           </thead>
           <tbody>
-            {orcamento.servicos.map((s, i) => (
-              <tr key={i}>
-                <td style={{ padding: "8px", border: "1px solid #ddd" }}>{s.servico}</td>
-                <td style={{ padding: "8px", border: "1px solid #ddd" }}>{s.qtd}</td>
-                <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                  R$ {s.valorUnitario.toFixed(2)}
-                </td>
-                <td style={{ padding: "8px", border: "1px solid #ddd" }}>
-                  R$ {(s.qtd * s.valorUnitario).toFixed(2)}
-                </td>
-              </tr>
-            ))}
+            {orcamento.servicos.map((s, i) => {
+              const qtd = Number(s.qtd) || 0;
+              const valor = Number(s.valorUnitario) || 0;
+              const subtotal = qtd * valor;
+
+              return (
+                <tr key={i}>
+                  <td style={{ padding: "8px", border: "1px solid #ddd" }}>{s.servico}</td>
+                  <td style={{ padding: "8px", border: "1px solid #ddd" }}>{qtd}</td>
+                  <td style={{ padding: "8px", border: "1px solid #ddd" }}>
+                    R$ {valor.toFixed(2)}
+                  </td>
+                  <td style={{ padding: "8px", border: "1px solid #ddd" }}>
+                    R$ {subtotal.toFixed(2)}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 
