@@ -3,21 +3,29 @@ import { Card, CardBody, ButtonGroup, ButtonMini } from "../styles/StyledCompone
 
 const ListaServicos = ({ servicos, onEditar, onExcluir }) => {
   return (
-    <>
-      {servicos.map((s, index) => (
-        <Card key={index}>
-          <CardBody>
-            <p>
+    <Card>
+      <CardBody>
+        {servicos.map((s, index) => (
+          <div
+            key={index}
+            style={{
+              display: "flex",               // Alinha conteúdo em linha
+              justifyContent: "space-between", // Espaço entre serviço e botões           // Alinha verticalmente
+              marginBottom: "5px",
+              gap: "100px",
+            }}
+          >
+            <p style={{ margin: 0 }}>
               <strong>{s.qtd}x {s.servico}</strong> - R$ {s.valorUnitario.toFixed(2)} cada
             </p>
-          </CardBody>
-          <ButtonGroup>
-            <ButtonMini onClick={() => onEditar(index)}>✏️ Editar</ButtonMini>
-            <ButtonMini onClick={() => onExcluir(index)}>❌ Excluir</ButtonMini>
-          </ButtonGroup>
-        </Card>
-      ))}
-    </>
+            <ButtonGroup>
+              <ButtonMini onClick={() => onEditar(index)}>✏️edita</ButtonMini>
+              <ButtonMini onClick={() => onExcluir(index)}>❌apagar</ButtonMini>
+            </ButtonGroup>
+          </div>
+        ))}
+      </CardBody>
+    </Card>
   );
 };
 

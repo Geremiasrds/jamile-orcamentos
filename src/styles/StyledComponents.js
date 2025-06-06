@@ -4,7 +4,7 @@ export const Container = styled.div`
   padding: 30px 20px;
   max-width: 600px;
   margin: 40px auto;
-  background: #f9fbff;
+  background:rgb(255, 251, 249);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 64, 128, 0.15);
   display: flex;
@@ -70,7 +70,6 @@ export const Card = styled.div`
   background: white;
   border: 1px solid #ddd;
   border-radius: 14px;
-  padding: 24px 28px;
   margin: 20px 0;
   box-shadow: 0 6px 12px rgba(0, 64, 128, 0.1);
   width: 100%;
@@ -94,23 +93,20 @@ export const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 20px;
+  gap: 10px;
 `;
 
 export const ButtonMini = styled.button`
-  padding: 8px 14px;
   border: none;
   border-radius: 8px;
   background-color: #004080;
   color: white;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 800;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.4s;
 
   &:hover {
-    background-color: #0066cc;
+    background-color:rgb(0, 204, 17);
   }
 `;
 
