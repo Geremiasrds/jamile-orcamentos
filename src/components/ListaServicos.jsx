@@ -12,7 +12,7 @@ const ListaServicos = ({ servicos, onEditar, onExcluir }) => {
               display: "flex",               // Alinha conteúdo em linha
               justifyContent: "space-between", // Espaço entre serviço e botões           // Alinha verticalmente
               marginBottom: "5px",
-              gap: "100px",
+              gap: "50px",
             }}
           >
             <p style={{ margin: 0 }}>

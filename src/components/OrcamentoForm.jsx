@@ -129,6 +129,13 @@ const OrcamentoForm = ({ cliente, setCliente, servicos, setServicos, onSalvar })
               onChange={(e) => atualizarServico(i, "servico", e.target.value)}
               style={{ display: "block", marginBottom: "2px", width: "100%", padding: "6px" }}
             />
+            <input
+              type="number"
+              placeholder="Valor unitário"
+              value={s.valorUnitario}
+              onChange={(e) => atualizarServico(i, "valorUnitario", e.target.value)}
+              style={{ display: "block", marginBottom: "2px", width: "100%", padding: "6px" }}
+            />
             {erros.servicos[i]?.servico && (
               <small style={{ color: "red" }}>{erros.servicos[i].servico}</small>
             )}
@@ -144,13 +151,6 @@ const OrcamentoForm = ({ cliente, setCliente, servicos, setServicos, onSalvar })
               <small style={{ color: "red" }}>{erros.servicos[i].qtd}</small>
             )}
 
-            <input
-              type="number"
-              placeholder="Valor unitário"
-              value={s.valorUnitario}
-              onChange={(e) => atualizarServico(i, "valorUnitario", e.target.value)}
-              style={{ display: "block", marginBottom: "2px", width: "100%", padding: "6px" }}
-            />
             {erros.servicos[i]?.valorUnitario && (
               <small style={{ color: "red" }}>{erros.servicos[i].valorUnitario}</small>
             )}

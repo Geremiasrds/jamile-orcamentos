@@ -14,9 +14,9 @@ export const Container = styled.div`
 
 export const Titulo = styled.h2`
   text-align: center;
-  color: #004080;
-  font-weight: 700;
-  font-size: 2.2rem;
+  color:rgb(8, 112, 216);
+  font-weight: 900;
+  font-size: 2.5rem;
   margin-bottom: 24px;
 `;
 

@@ -3,6 +3,7 @@ import ClienteInput from "./components/ClienteInput";
 import ServicoForm from "./components/ServicoForm";
 import ListaServicos from "./components/ListaServicos";
 import OrcamentoCard from "./components/OrcamentoCard";
+import MensagemAviso from "./components/MensagemAviso"; // ⬅️ Importando o novo componente
 import { Container, Titulo, Button } from "./styles/StyledComponents";
 
 const App = () => {
@@ -12,7 +13,19 @@ const App = () => {
   const [editandoServicoIndex, setEditandoServicoIndex] = useState(null);
   const [mostrarBotaoAddOrcamento, setMostrarBotaoAddOrcamento] = useState(false);
 
-  // ⬇️ Carrega dados do localStorage ao iniciar
+  const [mensagemErroAtualizacao, setMensagemErroAtualizacao] = useState("");
+
+  // ⬇️ Mensagem aparece toda vez que recarrega a página
+  useEffect(() => {
+    setMensagemErroAtualizacao("⚠️ A página foi atualizada e os dados foram recarregados.");
+
+    const timer = setTimeout(() => {
+      setMensagemErroAtualizacao("");
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     const clienteSalvo = localStorage.getItem("cliente");
     const servicosSalvos = localStorage.getItem("servicos");
@@ -23,17 +36,14 @@ const App = () => {
     if (orcamentosSalvos) setOrcamentos(JSON.parse(orcamentosSalvos));
   }, []);
 
-  // ⬇️ Sempre que cliente mudar, salva no localStorage
   useEffect(() => {
     localStorage.setItem("cliente", JSON.stringify(cliente));
   }, [cliente]);
 
-  // ⬇️ Sempre que serviços mudarem, salva no localStorage
   useEffect(() => {
     localStorage.setItem("servicos", JSON.stringify(servicos));
   }, [servicos]);
 
-  // ⬇️ Sempre que orçamentos mudarem, salva no localStorage
   useEffect(() => {
     localStorage.setItem("orcamentos", JSON.stringify(orcamentos));
   }, [orcamentos]);
@@ -89,7 +99,10 @@ const App = () => {
 
   return (
     <Container>
-      <Titulo>Gerador de Orçamentos</Titulo>
+      <Titulo>BIG REFRIGERAÇÃO</Titulo>
+
+      {/* ⬇️ Exibe a mensagem de atualização, agora com componente separado */}
+      <MensagemAviso texto={mensagemErroAtualizacao} />
 
       <ClienteInput cliente={cliente} setCliente={setCliente} />
 

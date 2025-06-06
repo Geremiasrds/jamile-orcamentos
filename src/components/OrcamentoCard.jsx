@@ -230,6 +230,8 @@ Total: R$ ${total}
       </CardBody>
     </Card>
   );
+
+  
 };
 
 export default OrcamentoCard;
