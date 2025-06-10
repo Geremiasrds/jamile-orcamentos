@@ -4,16 +4,16 @@ import { Input } from "../styles/StyledComponents";
 const wrapperStyle = {
   position: "relative",
   width: "100%",
-  maxWidth: "400px", // limite máximo do input
-  margin: "0 auto",  // centraliza horizontalmente
+  maxWidth: "300px",
+  margin: "0 auto",
 };
+
 const messageStyle = (error) => ({
   position: "absolute",
-  right: "50px",
   top: "50%",
   transform: "translateY(-50%)",
   color: error ? "red" : "green",
-  fontSize: "16px",
+  fontSize: "12px",
   pointerEvents: "none",
 });
 
@@ -34,12 +34,12 @@ const ClienteInput = ({ cliente, setCliente }) => {
     validate(value);
   };
 
-  // Ajusta estilo da borda do input conforme erro
   const inputStyle = {
-    paddingRight: "30px",
-     border: error ? "1px solid red" : "1px solid green",
+    border: error ? "1px solid red" : "1px solid green",
     fontSize: "16px",
     outline: "none",
+    width: "100%", // para preencher o wrapper
+    boxSizing: "border-box", // para evitar estouro por causa do padding/border
   };
 
   return (
@@ -52,9 +52,18 @@ const ClienteInput = ({ cliente, setCliente }) => {
         style={inputStyle}
       />
       {error ? (
-        <span style={{...messageStyle(true), left: "20px"}}>{error}</span>
+        <span style={{ ...messageStyle(true), left: "20px" }}>{error}</span>
       ) : cliente.trim() ? (
-        <span style={{...messageStyle(false), right: "0", fontWeight: "bold"}}>✔</span>
+        <span
+          style={{
+            ...messageStyle(false),
+            right: "10px",
+            fontWeight: "bold",
+            fontSize: "12px",
+          }}
+        >
+          ✔
+        </span>
       ) : null}
     </div>
   );
