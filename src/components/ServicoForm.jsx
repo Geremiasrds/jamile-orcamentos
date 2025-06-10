@@ -58,7 +58,8 @@ const ServicoForm = ({ adicionarServico, editandoServico }) => {
 
         {/* Quantidade atual */}
         <div style={{ fontSize: "16px", textAlign: "center",  color:'green', border: '1px solid black', borderRadius: '10px'} }>
-          <h3>{qtd} Serviços</h3>
+          <h3 style={{color: 'white', backgroundColor:"black"}}>{qtd}</h3>
+          <h4>Serviços</h4>
         </div>
 
         {/* Botão de aumentar */}

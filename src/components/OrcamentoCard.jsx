@@ -12,12 +12,10 @@ import {
 const OrcamentoCard = ({ orcamento, onExcluir, onEditar }) => {
   const [copiado, setCopiado] = useState(false);
 
-  // Recupera o número salvo no localStorage ao carregar o componente
   const [numeroCliente, setNumeroCliente] = useState(() => {
     return localStorage.getItem(`numero-${orcamento.id}`) || "";
   });
 
-  // Atualiza o localStorage sempre que o número mudar
   useEffect(() => {
     localStorage.setItem(`numero-${orcamento.id}`, numeroCliente);
   }, [numeroCliente, orcamento.id]);
@@ -69,7 +67,10 @@ ${orcamento.servicos
   };
 
   const excluirOrcamento = () => {
-    onExcluir(orcamento);
+    const confirmar = window.confirm("Tem certeza que deseja excluir este orçamento?");
+    if (confirmar) {
+      onExcluir(orcamento);
+    }
   };
 
   const editarOrcamento = () => {
@@ -184,7 +185,6 @@ Total: R$ ${total}
           Total: R$ {total}
         </p>
 
-        {/* Campo de número e botão pequeno do WhatsApp */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "16px" }}>
           <input
             type="tel"
@@ -230,8 +230,6 @@ Total: R$ ${total}
       </CardBody>
     </Card>
   );
-
-  
 };
 
 export default OrcamentoCard;
