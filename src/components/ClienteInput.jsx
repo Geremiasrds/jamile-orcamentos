@@ -15,14 +15,14 @@ const messageStyle = (error) => ({
   color: error ? "red" : "green",
   fontSize: "12px",
   pointerEvents: "none",
-});
+})
 
 const ClienteInput = ({ cliente, setCliente }) => {
   const [error, setError] = useState("");
 
   const validate = (value) => {
     if (!value.trim()) {
-      setError("O nome do cliente é obrigatório");
+      setError("O nome do cliente é obrigatório!");
     } else {
       setError("");
     }
