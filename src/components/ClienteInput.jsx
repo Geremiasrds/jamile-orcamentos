@@ -34,13 +34,25 @@ const ClienteInput = ({ cliente, setCliente }) => {
     validate(value);
   };
 
+
+  const isValid = cliente.trim() !== "";
+  const hasError = error !== "";
+
+
+
   const inputStyle = {
-    border: error ? "1px solid red" : "1px solid green",
+    border: hasError
+      ? "1px solid red"
+      : isValid
+        ? "1px solid green"
+        : "2px solid black",
     fontSize: "16px",
     outline: "none",
-    width: "100%", // para preencher o wrapper
-    boxSizing: "border-box", // para evitar estouro por causa do padding/border
+    width: "100%",
+    boxSizing: "border-box",
   };
+
+
 
   return (
     <div style={wrapperStyle}>
