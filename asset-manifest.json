@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.js": "/jamile-orcamentos/static/js/main.c763b40e.js",
+    "main.js": "/jamile-orcamentos/static/js/main.b3494f00.js",
     "static/js/239.3cc3c4e1.chunk.js": "/jamile-orcamentos/static/js/239.3cc3c4e1.chunk.js",
     "static/js/213.c596ef02.chunk.js": "/jamile-orcamentos/static/js/213.c596ef02.chunk.js",
-    "static/js/732.85c82beb.chunk.js": "/jamile-orcamentos/static/js/732.85c82beb.chunk.js",
+    "static/js/455.173a1a04.chunk.js": "/jamile-orcamentos/static/js/455.173a1a04.chunk.js",
     "index.html": "/jamile-orcamentos/index.html",
-    "main.c763b40e.js.map": "/jamile-orcamentos/static/js/main.c763b40e.js.map",
+    "main.b3494f00.js.map": "/jamile-orcamentos/static/js/main.b3494f00.js.map",
     "239.3cc3c4e1.chunk.js.map": "/jamile-orcamentos/static/js/239.3cc3c4e1.chunk.js.map",
     "213.c596ef02.chunk.js.map": "/jamile-orcamentos/static/js/213.c596ef02.chunk.js.map",
-    "732.85c82beb.chunk.js.map": "/jamile-orcamentos/static/js/732.85c82beb.chunk.js.map"
+    "455.173a1a04.chunk.js.map": "/jamile-orcamentos/static/js/455.173a1a04.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.c763b40e.js"
+    "static/js/main.b3494f00.js"
   ]
 }
