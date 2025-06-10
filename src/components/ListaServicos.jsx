@@ -6,7 +6,7 @@ const ListaServicos = ({ servicos, onEditar, onExcluir }) => {
     <Card>
       <CardBody>
         {servicos.map((s, index) => (
-          <div
+          <div className=""
             key={index}
             style={{
               display: "flex",               // Alinha conteúdo em linha

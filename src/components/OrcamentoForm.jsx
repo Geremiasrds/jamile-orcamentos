@@ -137,13 +137,7 @@ const OrcamentoForm = ({ cliente, setCliente, servicos, setServicos, onSalvar })
               <small style={{ color: "red" }}>{erros.servicos[i].servico}</small>
             )}
 
-            <input
-              type="number"
-              placeholder="Quantidade"
-              value={s.qtd}
-              onChange={(e) => atualizarServico(i, "qtd", e.target.value)}
-              style={{ display: "block", marginBottom: "2px", width: "100%", padding: "6px" }}
-            />
+           
             {erros.servicos[i]?.qtd && (
               <small style={{ color: "red" }}>{erros.servicos[i].qtd}</small>
             )}
