@@ -97,15 +97,12 @@ const OrcamentoForm = ({ cliente, setCliente, servicos, setServicos, onSalvar })
           setCliente(e.target.value);
           validarCliente(e.target.value);
         }}
-        style={{ display: "block", marginBottom: "4px", width: "100%", padding: "8px" }}
+        
       />
-      {erros.cliente && (
-        <small style={{ color: "red", fontSize: "0.7rem" }}>{erros.cliente}</small>
-      )}
 
       <div
         style={{
-          border: "1px solid #ccc",
+          border: "1px solid black",
           padding: "12px",
           borderRadius: "8px",
           marginTop: "12px",

@@ -101,7 +101,6 @@ const App = () => {
     <Container>
       <Titulo>BIG REFRIGERAÇÃO</Titulo>
 
-      {/* ⬇️ Exibe a mensagem de atualização, agora com componente separado */}
       <MensagemAviso texto={mensagemErroAtualizacao} />
 
       <ClienteInput cliente={cliente} setCliente={setCliente} />

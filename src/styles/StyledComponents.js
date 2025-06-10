@@ -25,13 +25,12 @@ export const Input = styled.input`
   width: 100%;
   padding: 12px 14px;
   margin: 10px 0;
-  border: 1.5px solid #004080;
   border-radius: 10px;
   font-size: 1.1rem;
   transition: border-color 0.3s;
 
   &:focus {
-    border-color: #0066cc;
+    border-color:rgb(13, 119, 224);
     outline: none;
   }
 `;
@@ -81,7 +80,7 @@ export const CardHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   font-weight: 700;
-  color: #004080;
+  color:rgb(0, 0, 0);
   font-size: 1.2rem;
 `;
 

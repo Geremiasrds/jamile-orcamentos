@@ -1,7 +1,6 @@
-// src/components/MensagemAviso.jsx
+
 import React from "react";
 
-// Componente simples de mensagem de aviso (amarelo, visível por poucos segundos)
 const MensagemAviso = ({ texto }) => {
   if (!texto) return null;
 
