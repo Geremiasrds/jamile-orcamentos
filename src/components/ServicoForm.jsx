@@ -52,17 +52,17 @@ const ServicoForm = ({ adicionarServico, editandoServico }) => {
       />
 
 
-      <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
         {/* Botão de diminuir */}
-        <Button onClick={diminuirQtd} style={{ width: "40px" }}>-</Button>
+        <Button onClick={diminuirQtd} style={{ width: "" }}>➖</Button>
 
         {/* Quantidade atual */}
-        <div style={{ fontSize: "18px", minWidth: "50px", textAlign: "center",  color:'blue', padding: '0px 0px 0px'} }>
-          <h1>{qtd}</h1>
+        <div style={{ fontSize: "16px", textAlign: "center",  color:'green', border: '1px solid black', borderRadius: '10px'} }>
+          <h3>{qtd} Serviços</h3>
         </div>
 
         {/* Botão de aumentar */}
-        <Button onClick={aumentarQtd} style={{ width: "40px" }}>+</Button>
+        <Button onClick={aumentarQtd} style={{ width: "" }}>➕</Button>
       </div>
 
       {/* Campo de valor unitário */}
