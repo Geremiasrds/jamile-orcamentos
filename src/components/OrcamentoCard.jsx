@@ -83,26 +83,14 @@ ${orcamento.servicos
     if (!numeroCliente) return alert("Digite o número do cliente!");
 
     const mensagem = `
-BIG REFRIGERAÇÃO
+*BIG REFRIGERAÇÃO*
 
 Cliente: ${orcamento.cliente}
 Data: ${data}
 Hora: ${hora}
 
-Recebo do Sr(a) ${orcamento.cliente} o valor total de R$ ${total} referente aos serviços abaixo:
-
-${orcamento.servicos
-  .map((s) => {
-    const qtd = Number(s.qtd) || 0;
-    const valor = Number(s.valorUnitario) || 0;
-    const subtotal = qtd * valor;
-    return `${s.servico} - Qtd: ${qtd}, Unitário: R$ ${valor.toFixed(
-      2
-    )}, Subtotal: R$ ${subtotal.toFixed(2)}`;
-  })
-  .join("\n")}
-
-Total: R$ ${total}
+Valor total dos serviços R$ ${total}
+ 
     `;
 
     const numero = numeroCliente.replace(/\D/g, "");
