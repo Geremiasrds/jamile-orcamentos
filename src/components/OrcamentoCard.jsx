@@ -85,13 +85,28 @@ ${orcamento.servicos
     const mensagem = `
 *BIG REFRIGERAÇÃO*
 
-Cliente: ${orcamento.cliente}
-Data: ${data}
-Hora: ${hora}
+Cliente: *${orcamento.cliente}*
+Data: *${data}*
+Hora: *${hora}*
 
-Valor total dos serviços R$ ${total}
- 
+Ola, Sr(a) *${orcamento.cliente}*, aqui esta o valor total *R$ ${total}* referente aos serviços abaixo:
+
+${orcamento.servicos
+  .map((s) => {
+    const qtd = Number(s.qtd) || 0;
+    const valor = Number(s.valorUnitario) || 0;
+    const subtotal = qtd * valor;
+
+    return ` *${qtd}*, *${s.servico}* cada custa R$ ${valor.toFixed(
+      2
+    )}, Total: *R$ ${subtotal.toFixed(2)}*`;
+  })
+  .join("\n")}
+
+
     `;
+
+
 
     const numero = numeroCliente.replace(/\D/g, "");
     const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
