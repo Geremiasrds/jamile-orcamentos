@@ -105,7 +105,9 @@ ${orcamento.servicos
     const subtotal = qtd * valor;
 
     return ` *${qtd}  ${s.servico} Total: R$ ${subtotal.toFixed(2)}*`;
+    // valor total{subtotal}
   })
+  
   .join("\n")}
 `;
 
@@ -115,6 +117,7 @@ ${orcamento.servicos
   };
 
   return (
+    <>
     <Card>
       <CardHeader
         style={{
@@ -126,7 +129,7 @@ ${orcamento.servicos
         }}
       >
         <Titulo
-          style={{ margin: 0, fontWeight: "bold", fontSize: "2rem", letterSpacing: "0.1em" }}
+          style={{ margin: 0, fontWeight: "bold", fontSize: "1.5rem", letterSpacing: "0.1em" }}
         >
           BIG REFRIGERAÇÃO
         </Titulo>
@@ -205,10 +208,17 @@ ${orcamento.servicos
               cursor: "pointer",
             }}
           >
-            Whats
+            Whatsapp
           </button>
         </div>
 
+
+        {/* ✅ Modal de confirmação */}
+        {mostrarModal && (
+          <ConfirmModal onConfirm={confirmarExclusao} onCancel={cancelarExclusao} />
+        )}
+      </CardBody>
+    </Card>
         <ButtonGroup>
           <Button onClick={copiarOrcamento}>
             {copiado ? "Orçamento copiado!" : "Copiar Orçamento"}
@@ -221,13 +231,7 @@ ${orcamento.servicos
             Excluir
           </Button>
         </ButtonGroup>
-
-        {/* ✅ Modal de confirmação */}
-        {mostrarModal && (
-          <ConfirmModal onConfirm={confirmarExclusao} onCancel={cancelarExclusao} />
-        )}
-      </CardBody>
-    </Card>
+        </>
   );
 };
 

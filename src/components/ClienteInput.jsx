@@ -53,7 +53,7 @@ const ClienteInput = ({ cliente, setCliente }) => {
       : isValid
         ? "1px solid green"
         : "2px solid black",
-    fontSize: "16px",
+    fontSize: "14px",
     outline: "none",
     width: "100%",
     boxSizing: "border-box",

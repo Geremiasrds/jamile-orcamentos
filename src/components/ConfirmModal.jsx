@@ -7,7 +7,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.48);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,14 +51,14 @@ const ModalButton = styled.button`
   }
 `;
 
-const ConfirmModal = ({ onConfirm, onCancel }) => {
+const ConfirmModal = ({ onConfirm, onCancel }) => {         '   '
   return (
     <Overlay>
       <Modal>
         <Title>Tem certeza que deseja excluir este orçamento?</Title>
         <ButtonGroup>
           <ModalButton onClick={onConfirm}>Sim, excluir</ModalButton>
-          <ModalButton variant="cancel" onClick={onCancel}>Ainda, não</ModalButton>
+          <ModalButton variant="cancel" onClick={onCancel}>Ainda não!</ModalButton>
         </ButtonGroup>
       </Modal>
     </Overlay>

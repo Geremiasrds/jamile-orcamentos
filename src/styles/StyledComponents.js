@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 export const Container = styled.div`
   max-width: 600px;
   margin:auto;
-  background:rgba(170, 168, 167, 0.75);
+  background:rgba(253, 253, 253, 0.19);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(15, 58, 100, 0.15);
   display: flex;
@@ -22,10 +22,10 @@ export const Titulo = styled.h2`
 export const Input = styled.input`
   display: block;
   width: 100%;
-  padding: 12px 14px;
-  margin: 10px 0;
+  padding: 10px 14px;
+  margin: 8px 0;
   border-radius: 10px;
-  font-size: 1.1rem;
+  font-size: 0.8rem;
   transition: border-color 0.3s;
 
   &:focus {
@@ -64,11 +64,10 @@ export const ListItem = styled.li`
 `;
 
 export const Card = styled.div`
-  background: rgba(229, 230, 231, 0.66);
+  background: rgb(255, 255, 255);
   border-botton: 1px solid ;
-  margin: 15px 0;
+  margin: 3px 0;
   box-shadow: 0 6px 12px rgba(0, 64, 128, 0.1);
-  width: 100%;
   max-width: 600px;
 `;
 
@@ -76,13 +75,13 @@ export const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 700;
+  font-weight: 1000;
   color:rgb(0, 0, 0);
   font-size: 1.2rem;
 `;
 
 export const CardBody = styled.div`
-  margin-top: 14px;
+  margin-top: 10px;
 `;
 
 export const ButtonGroup = styled.div`
