@@ -60,9 +60,18 @@ const App = () => {
     setMostrarBotaoAddOrcamento(true);
   };
 
-  const editarServico = (index) => {
+  const editarServico = (index, novoServico = null) => {
+  if (novoServico) {
+    // Atualização inline vindo do input do ListaServicos
+    const novosServicos = [...servicos];
+    novosServicos[index] = novoServico;
+    setServicos(novosServicos);
+  } else {
+    // Edição via botão externo (caso ServicoForm ainda use)
     setEditandoServicoIndex(index);
-  };
+  }
+};
+
 
   const excluirServico = (index) => {
     const novos = servicos.filter((_, i) => i !== index);
