@@ -58,7 +58,7 @@ const ConfirmModal = ({ onConfirm, onCancel }) => {
         <Title>Tem certeza que deseja excluir este orçamento?</Title>
         <ButtonGroup>
           <ModalButton onClick={onConfirm}>Sim, excluir</ModalButton>
-          <ModalButton variant="cancel" onClick={onCancel}>Cancelar</ModalButton>
+          <ModalButton variant="cancel" onClick={onCancel}>Ainda, não</ModalButton>
         </ButtonGroup>
       </Modal>
     </Overlay>

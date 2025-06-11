@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import gerarPDF from "../utils/gerarPDF";
+import ConfirmModal from "../components/ConfirmModal"; // ✅ Importa o modal
 import {
   Card,
   CardHeader,
@@ -11,7 +12,7 @@ import {
 
 const OrcamentoCard = ({ orcamento, onExcluir, onEditar }) => {
   const [copiado, setCopiado] = useState(false);
-
+  const [mostrarModal, setMostrarModal] = useState(false); // ✅ Estado do modal
   const [numeroCliente, setNumeroCliente] = useState(() => {
     return localStorage.getItem(`numero-${orcamento.id}`) || "";
   });
@@ -67,10 +68,16 @@ ${orcamento.servicos
   };
 
   const excluirOrcamento = () => {
-    const confirmar = window.confirm("Tem certeza que deseja excluir este orçamento?");
-    if (confirmar) {
-      onExcluir(orcamento);
-    }
+    setMostrarModal(true); // ✅ Mostra o modal
+  };
+
+  const confirmarExclusao = () => {
+    onExcluir(orcamento);
+    setMostrarModal(false);
+  };
+
+  const cancelarExclusao = () => {
+    setMostrarModal(false);
   };
 
   const editarOrcamento = () => {
@@ -85,11 +92,11 @@ ${orcamento.servicos
     const mensagem = `
 *BIG REFRIGERAÇÃO*
 
-Cliente: *${orcamento.cliente}
-Data: ${data}
-Hora: ${hora}*
+Cliente: *${orcamento.cliente}*
+Data: *${data}*
+Hora: *${hora}*
 
-Ola, Sr(a) *${orcamento.cliente}*, aqui esta o valor total R$ ${total} referente aos serviços abaixo:
+Olá, Sr(a) *_${orcamento.cliente}_*, aqui está o valor total *R$ ${total}* referente aos serviços abaixo:
 
 ${orcamento.servicos
   .map((s) => {
@@ -97,14 +104,10 @@ ${orcamento.servicos
     const valor = Number(s.valorUnitario) || 0;
     const subtotal = qtd * valor;
 
-    return ` *${qtd}  ${s.servico} Total: R$ ${subtotal.toFixed(2)}*`;
+    return ` *${qtd}*  *${s.servico}* Total: *R$ ${subtotal.toFixed(2)}*`;
   })
   .join("\n")}
-
-
-    `;
-
-
+`;
 
     const numero = numeroCliente.replace(/\D/g, "");
     const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
@@ -128,22 +131,12 @@ ${orcamento.servicos
           BIG REFRIGERAÇÃO
         </Titulo>
 
-        <div
-          style={{
-            width: "100%",
-            textAlign: "left",
-            marginTop: "12px",
-          }}
-        >
+        <div style={{ width: "100%", textAlign: "left", marginTop: "12px" }}>
           <p style={{ margin: "4px 0", fontWeight: "600", fontSize: "1.1rem" }}>
             Cliente: {orcamento.cliente}
           </p>
-          <p style={{ margin: "4px 0", fontSize: "0.9rem", color: "#555" }}>
-            Data: {data}
-          </p>
-          <p style={{ margin: "4px 0", fontSize: "0.9rem", color: "#555" }}>
-            Hora: {hora}
-          </p>
+          <p style={{ margin: "4px 0", fontSize: "0.9rem", color: "#555" }}>Data: {data}</p>
+          <p style={{ margin: "4px 0", fontSize: "0.9rem", color: "#555" }}>Hora: {hora}</p>
           <p style={{ marginTop: "12px", fontWeight: "600", fontSize: "1rem" }}>
             Recebo do Sr(a) {orcamento.cliente} o valor total de R$ {total} referente aos serviços abaixo:
           </p>
@@ -228,6 +221,11 @@ ${orcamento.servicos
             Excluir
           </Button>
         </ButtonGroup>
+
+        {/* ✅ Modal de confirmação */}
+        {mostrarModal && (
+          <ConfirmModal onConfirm={confirmarExclusao} onCancel={cancelarExclusao} />
+        )}
       </CardBody>
     </Card>
   );
