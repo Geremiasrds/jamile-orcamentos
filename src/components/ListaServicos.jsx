@@ -92,15 +92,16 @@ const ListaServicos = ({ servicos, onEditar, onExcluir }) => {
                 </div>
               </>
             ) : (
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <p style={{ margin: 0 }}>
-                  <strong>{s.qtd}x {s.servico}</strong> - R$ {s.valorUnitario.toFixed(2)} cada
-                </p>
-                <ButtonGroup>
-                  <ButtonMini onClick={() => iniciarEdicao(index)}>✏️</ButtonMini>
-                  <ButtonMini onClick={() => onExcluir(index)}>❌</ButtonMini>
-                </ButtonGroup>
-              </div>
+             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+  <p style={{ margin: 0  }}>
+    <strong >Temos {s.qtd} {s.servico}, cada uma custa  R$ {s.valorUnitario.toFixed(2)} Total:  R$ {(s.qtd * s.valorUnitario).toFixed(2)}</strong>
+  </p>
+  <ButtonGroup>
+    <ButtonMini onClick={() => iniciarEdicao(index)}>✏️</ButtonMini>
+    <ButtonMini onClick={() => onExcluir(index)}>❌</ButtonMini>
+  </ButtonGroup>
+</div>
+
             )}
           </div>
         ))}
