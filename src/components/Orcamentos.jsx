@@ -45,16 +45,6 @@ const Orcamentos = () => {
     }
   };
 
-  const excluirOrcamento = (id) => {
-    if (window.confirm("Tem certeza que deseja excluir este orçamento?")) {
-      setOrcamentos(orcamentos.filter((o) => o.id !== id));
-      if (editandoOrcamentoId === id) {
-        setEditandoOrcamentoId(null);
-        setCliente("");
-        setServicos([]);
-      }
-    }
-  };
 
   return (
     <div>

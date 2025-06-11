@@ -85,11 +85,11 @@ ${orcamento.servicos
     const mensagem = `
 *BIG REFRIGERAÇÃO*
 
-Cliente: *${orcamento.cliente}*
-Data: *${data}*
+Cliente: *${orcamento.cliente}*</ br>
+Data: *${data}*</ br>
 Hora: *${hora}*
 
-Ola, Sr(a) *${orcamento.cliente}*, aqui esta o valor total *R$ ${total}* referente aos serviços abaixo:
+Ola, Sr(a) *_${orcamento.cliente}_*, aqui esta o valor total *R$ ${total}* referente aos serviços abaixo:
 
 ${orcamento.servicos
   .map((s) => {
@@ -97,9 +97,7 @@ ${orcamento.servicos
     const valor = Number(s.valorUnitario) || 0;
     const subtotal = qtd * valor;
 
-    return ` *${qtd}*, *${s.servico}* cada custa R$ ${valor.toFixed(
-      2
-    )}, Total: *R$ ${subtotal.toFixed(2)}*`;
+    return ` *${qtd}*  *${s.servico}* Total: *R$ ${subtotal.toFixed(2)}*`;
   })
   .join("\n")}
 
