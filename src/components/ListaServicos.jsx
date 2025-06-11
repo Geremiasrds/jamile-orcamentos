@@ -42,7 +42,6 @@ const ListaServicos = ({ servicos, onEditar, onExcluir }) => {
           >
             {editandoIndex === index ? (
               <>
-                {/* 👇 Preview atualizado em tempo real */}
                 <p style={{ margin: "0 0 6px 0", fontWeight: "bold", color: "#333" }}>
                   {valoresEditados.qtd}x {valoresEditados.servico} - R$ {valoresEditados.valorUnitario.toFixed(2)} cada
                 </p>
@@ -97,6 +96,8 @@ const ListaServicos = ({ servicos, onEditar, onExcluir }) => {
     <strong >Temos {s.qtd} {s.servico}, cada uma custa  R$ {s.valorUnitario.toFixed(2)} Total:  R$ {(s.qtd * s.valorUnitario).toFixed(2)}</strong>
   </p>
   <ButtonGroup>
+
+    
     <ButtonMini onClick={() => iniciarEdicao(index)}>✏️</ButtonMini>
     <ButtonMini onClick={() => onExcluir(index)}>❌</ButtonMini>
   </ButtonGroup>

@@ -17,7 +17,7 @@ const App = () => {
 
   // ⬇️ Mensagem aparece toda vez que recarrega a página
   useEffect(() => {
-    setMensagemErroAtualizacao("⚠️ A página foi atualizada e os dados foram recarregados.");
+    setMensagemErroAtualizacao('');
 
     const timer = setTimeout(() => {
       setMensagemErroAtualizacao("");

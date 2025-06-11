@@ -1,12 +1,11 @@
 import styled, { keyframes } from "styled-components";
 
 export const Container = styled.div`
-  padding: 30px 20px;
   max-width: 600px;
-  margin: 40px auto;
-  background:rgb(255, 251, 249);
+  margin:auto;
+  background:rgba(170, 168, 167, 0.75);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 64, 128, 0.15);
+  box-shadow: 0 4px 12px rgba(15, 58, 100, 0.15);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -66,10 +65,9 @@ export const ListItem = styled.li`
 `;
 
 export const Card = styled.div`
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 14px;
-  margin: 20px 0;
+  background: rgba(229, 230, 231, 0.66);
+  border-botton: 1px solid ;
+  margin: 15px 0;
   box-shadow: 0 6px 12px rgba(0, 64, 128, 0.1);
   width: 100%;
   max-width: 600px;
