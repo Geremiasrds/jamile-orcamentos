@@ -8,6 +8,8 @@ import {
   Button,
   ButtonGroup,
   Titulo,
+  ButtonDeCopia,
+  ButtonDePdf,
 } from "../styles/StyledComponents";
 
 const OrcamentoCard = ({ orcamento, onExcluir, onEditar }) => {
@@ -119,6 +121,9 @@ ${orcamento.servicos
   return (
     <>
     <Card>
+      <ButtonDeCopia onClick={copiarOrcamento}>
+            {copiado ? "✔" : "📝"}
+          </ButtonDeCopia>
       <CardHeader
         style={{
           display: "flex",
@@ -210,6 +215,7 @@ ${orcamento.servicos
           >
             Whatsapp
           </button>
+          <ButtonDePdf onClick={baixarPDF}>Baixar PDF</ButtonDePdf>
         </div>
 
 
@@ -220,10 +226,8 @@ ${orcamento.servicos
       </CardBody>
     </Card>
         <ButtonGroup>
-          <Button onClick={copiarOrcamento}>
-            {copiado ? "Orçamento copiado!" : "Copiar Orçamento"}
-          </Button>
-          <Button onClick={baixarPDF}>Baixar PDF</Button>
+          
+          
           <Button onClick={editarOrcamento} style={{ backgroundColor: "#0066cc" }}>
             Editar
           </Button>

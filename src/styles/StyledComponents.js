@@ -34,6 +34,42 @@ export const Input = styled.input`
   }
 `;
 
+export const ButtonDeCopia = styled.button`
+  padding: 5px 0px;
+  margin-top: 10px 0px 0px 100px;
+  background-color:rgba(138, 140, 141, 0);
+  border: 1px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 20px;
+  color:green;
+  width: 40px;
+  position: absolute;
+  
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color:rgb(224, 225, 226);
+
+`
+export const ButtonDePdf = styled.button`
+  padding: 12px 20px;
+  margin-top: 18px;
+  background-color: #004080;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.1rem;
+  max-width: 300px;
+
+
+  &:hover {
+    background-color: #0066cc;
+  }
+`
 export const Button = styled.button`
   padding: 12px 20px;
   margin-top: 18px;
