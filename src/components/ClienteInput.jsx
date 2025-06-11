@@ -32,12 +32,17 @@ const ClienteInput = ({ cliente, setCliente }) => {
 
   const handleChange = (e) => {
     let value = e.target.value;
-    value = value.replace(/[^A-Za-zÀ-ÿ\s]/g, "");
-    value = value.replace(/\s{2,}/g, " ");
+
+    // Remove qualquer caractere que não seja letra (inclusive acentuadas)
+    value = value.replace(/[^A-Za-zÀ-ÿ]/g, "");
+
+    // Limita repetições da mesma letra a no máximo 2 (ex: "aaa" → "aa")
     value = value.replace(/(\w)\1{2,}/g, "$1$1");
+
     setCliente(value);
     validate(value);
   };
+
 
   const isValid = cliente.trim() !== "";
   const hasError = error !== "";
@@ -46,8 +51,8 @@ const ClienteInput = ({ cliente, setCliente }) => {
     border: hasError
       ? "1px solid red"
       : isValid
-      ? "1px solid green"
-      : "2px solid black",
+        ? "1px solid green"
+        : "2px solid black",
     fontSize: "16px",
     outline: "none",
     width: "100%",
