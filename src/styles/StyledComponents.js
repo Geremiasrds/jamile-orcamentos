@@ -190,11 +190,6 @@ export const QuantidadeLabel = styled.span`
   color: #333;
 `;
 
-
-// styledComponents.js
-
-
-// Animação glow pulsante
 const glow = keyframes`
   0%, 100% {
     box-shadow: 0 0 8px #00c896, 0 0 20px #00c896;
@@ -203,6 +198,7 @@ const glow = keyframes`
     box-shadow: 0 0 15px #00fcb0, 0 0 30px #00fcb0;
   }
 `;
+
 
 export const AddButton = styled.button`
   background-color: #00c896;

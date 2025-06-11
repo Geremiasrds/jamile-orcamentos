@@ -15,45 +15,44 @@ const messageStyle = (error) => ({
   color: error ? "red" : "green",
   fontSize: "12px",
   pointerEvents: "none",
-})
+});
 
 const ClienteInput = ({ cliente, setCliente }) => {
   const [error, setError] = useState("");
 
-  
   const validate = (value) => {
     if (!value.trim()) {
       setError("O nome do cliente é obrigatório!");
+    } else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(value)) {
+      setError("O nome só pode conter letras e espaços!");
     } else {
       setError("");
     }
   };
 
   const handleChange = (e) => {
-    const value = e.target.value;
+    let value = e.target.value;
+    value = value.replace(/[^A-Za-zÀ-ÿ\s]/g, "");
+    value = value.replace(/\s{2,}/g, " ");
+    value = value.replace(/(\w)\1{2,}/g, "$1$1");
     setCliente(value);
     validate(value);
   };
 
-
   const isValid = cliente.trim() !== "";
   const hasError = error !== "";
-
-
 
   const inputStyle = {
     border: hasError
       ? "1px solid red"
       : isValid
-        ? "1px solid green"
-        : "2px solid black",
+      ? "1px solid green"
+      : "2px solid black",
     fontSize: "16px",
     outline: "none",
     width: "100%",
     boxSizing: "border-box",
   };
-
-
 
   return (
     <div style={wrapperStyle}>
