@@ -92,11 +92,11 @@ ${orcamento.servicos
     const mensagem = `
 *BIG REFRIGERAÇÃO*
 
-Cliente: *${orcamento.cliente}
-Data: ${data}
-Hora: ${hora}*
+*Cliente: ${orcamento.cliente}*
+*Data: ${data}*
+*Hora: ${hora}*
 
-Olá, Sr(a) *${orcamento.cliente}*, aqui está o valor total R$ ${total} referente aos serviços abaixo:
+Olá, Sr(a) *${orcamento.cliente},* aqui está o valor total R$ ${total} referente aos serviços abaixo:
 
 ${orcamento.servicos
   .map((s) => {
