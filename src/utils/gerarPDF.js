@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import logoBase64 from "./logoEditadaBase64"; // Ajuste o caminho conforme seu projeto
+import logoBase64 from "./logoEditadaBase64"; // Logo em base64
 
 const gerarPDF = (cliente, data, servicos) => {
   const doc = new jsPDF();
@@ -8,6 +8,9 @@ const gerarPDF = (cliente, data, servicos) => {
   const dataObj = data instanceof Date ? data : new Date(data);
   const dataFormatada = dataObj.toLocaleDateString("pt-BR");
   const horaFormatada = new Date().toLocaleTimeString("pt-BR");
+
+  // === COR AZUL PADRÃO DO PROJETO ===
+  const azulClaro = [0, 102, 204];
 
   // Logo
   const logoX = 15;
@@ -27,8 +30,7 @@ const gerarPDF = (cliente, data, servicos) => {
   doc.line(linhaX, linhaY1, linhaX, linhaY2);
 
   // Título e subtítulo
-  const azul = [0, 102, 204];
-  doc.setTextColor(...azul);
+  doc.setTextColor(...azulClaro);
   doc.setFontSize(48);
   doc.setFont("helvetica", "bold");
   doc.text("BIG", linhaX + 6, 40);
@@ -58,9 +60,6 @@ const gerarPDF = (cliente, data, servicos) => {
     0
   );
 
-  // Espaço reservado (removível)
-  doc.text(``, 14, 88);
-
   // Tabela dos serviços
   const head = [["Descrição", "Qtd", "Valor Unitário", "Subtotal"]];
   const body = servicosNumericos.map((s) => [
@@ -76,7 +75,7 @@ const gerarPDF = (cliente, data, servicos) => {
     body,
     theme: "grid",
     styles: { fontSize: 11 },
-    headStyles: { fillColor: azul, textColor: 255 },
+    headStyles: { fillColor: azulClaro, textColor: 255 },
     didDrawPage: (data) => {
       const finalY = data.cursor.y + 10;
       doc.setFontSize(12);
@@ -85,21 +84,21 @@ const gerarPDF = (cliente, data, servicos) => {
     },
   });
 
-  // Rodapé estilizado e alinhado no canto inferior esquerdo
+  // Rodapé alinhado ao canto inferior esquerdo com fundo azul claro
   const pageHeight = doc.internal.pageSize.height;
-  const rodapeAltura = 50;
+  const rodapeAltura = 40;
   const rodapeY = pageHeight - rodapeAltura;
 
-  // Fundo azul escuro
-  doc.setFillColor(0, 51, 102);
+  // Fundo azul claro igual ao título
+  doc.setFillColor(...azulClaro);
   doc.rect(0, rodapeY, 210, rodapeAltura, "F");
 
-  // Cor e fonte do texto do rodapé
+  // Texto branco no rodapé
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
 
-  // Informações da empresa com ícones, alinhadas à esquerda
+  // Informações da empresa
   const margemEsquerda = 14;
   doc.text("Tel: (91) 99906-9633", margemEsquerda, rodapeY + 10);
   doc.text("Residencial Viver Primavera, Rua do Ronario,", margemEsquerda, rodapeY + 16);
