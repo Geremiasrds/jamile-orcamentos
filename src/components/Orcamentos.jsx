@@ -18,32 +18,24 @@ const Orcamentos = () => {
   }, [orcamentos]);
 
   const adicionarOuEditarOrcamento = () => {
-    if (!cliente || servicos.length === 0) return;
+  if (servicos.length === 0) return; // Só impede se não tiver serviço
 
-    const novoOrcamento = {
-      id: editandoOrcamentoId || Date.now(),
-      cliente,
-      servicos,
-    };
-
-    const novosOrcamentos = editandoOrcamentoId
-      ? orcamentos.map((o) => (o.id === editandoOrcamentoId ? novoOrcamento : o))
-      : [...orcamentos, novoOrcamento];
-
-    setOrcamentos(novosOrcamentos);
-    setCliente("");
-    setServicos([]);
-    setEditandoOrcamentoId(null);
+  const novoOrcamento = {
+    id: editandoOrcamentoId || Date.now(),
+    cliente: cliente.trim(), // Pode estar vazio
+    servicos,
   };
 
-  const editarOrcamento = (id) => {
-    const orcamento = orcamentos.find((o) => o.id === id);
-    if (orcamento) {
-      setCliente(orcamento.cliente);
-      setServicos(orcamento.servicos);
-      setEditandoOrcamentoId(id);
-    }
-  };
+  const novosOrcamentos = editandoOrcamentoId
+    ? orcamentos.map((o) => (o.id === editandoOrcamentoId ? novoOrcamento : o))
+    : [...orcamentos, novoOrcamento];
+
+  setOrcamentos(novosOrcamentos);
+  setCliente("");
+  setServicos([]);
+  setEditandoOrcamentoId(null);
+};
+
 
 
   return (

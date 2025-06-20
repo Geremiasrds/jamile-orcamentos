@@ -12,20 +12,18 @@ const App = () => {
   const [orcamentos, setOrcamentos] = useState([]);
   const [editandoServicoIndex, setEditandoServicoIndex] = useState(null);
   const [mostrarBotaoAddOrcamento, setMostrarBotaoAddOrcamento] = useState(false);
-
   const [mensagemErroAtualizacao, setMensagemErroAtualizacao] = useState("");
 
-  // ⬇️ Mensagem aparece toda vez que recarrega a página
+  // Limpa mensagem depois de 3s
   useEffect(() => {
-    setMensagemErroAtualizacao('');
-
+    if (!mensagemErroAtualizacao) return;
     const timer = setTimeout(() => {
       setMensagemErroAtualizacao("");
-    }, 3000);
-
+    }, 5000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [mensagemErroAtualizacao]);
 
+  // Carrega dados do localStorage no início
   useEffect(() => {
     const clienteSalvo = localStorage.getItem("cliente");
     const servicosSalvos = localStorage.getItem("servicos");
@@ -36,6 +34,7 @@ const App = () => {
     if (orcamentosSalvos) setOrcamentos(JSON.parse(orcamentosSalvos));
   }, []);
 
+  // Salva no localStorage quando mudam
   useEffect(() => {
     localStorage.setItem("cliente", JSON.stringify(cliente));
   }, [cliente]);
@@ -61,17 +60,14 @@ const App = () => {
   };
 
   const editarServico = (index, novoServico = null) => {
-  if (novoServico) {
-    // Atualização inline vindo do input do ListaServicos
-    const novosServicos = [...servicos];
-    novosServicos[index] = novoServico;
-    setServicos(novosServicos);
-  } else {
-    // Edição via botão externo (caso ServicoForm ainda use)
-    setEditandoServicoIndex(index);
-  }
-};
-
+    if (novoServico) {
+      const novosServicos = [...servicos];
+      novosServicos[index] = novoServico;
+      setServicos(novosServicos);
+    } else {
+      setEditandoServicoIndex(index);
+    }
+  };
 
   const excluirServico = (index) => {
     const novos = servicos.filter((_, i) => i !== index);
@@ -81,7 +77,17 @@ const App = () => {
   };
 
   const adicionarOrcamento = () => {
-    if (!cliente || servicos.length === 0) return;
+    if (servicos.length === 0) {
+      setMensagemErroAtualizacao("Adicione ao menos um serviço antes de salvar o orçamento");
+      return;
+    }
+
+    // Permite cliente vazio
+    if (!cliente) {
+      setMensagemErroAtualizacao("Cliente está vazio, mas orçamento será salvo mesmo assim.");
+    } else {
+      setMensagemErroAtualizacao("");
+    }
 
     const novoOrcamento = {
       cliente,
@@ -96,13 +102,13 @@ const App = () => {
   };
 
   const excluirOrcamento = (orc) => {
-    setOrcamentos(orcamentos.filter(o => o !== orc));
+    setOrcamentos(orcamentos.filter((o) => o !== orc));
   };
 
   const editarOrcamento = (orc) => {
     setCliente(orc.cliente);
     setServicos(orc.servicos);
-    setOrcamentos(orcamentos.filter(o => o !== orc));
+    setOrcamentos(orcamentos.filter((o) => o !== orc));
     setMostrarBotaoAddOrcamento(true);
   };
 
@@ -119,11 +125,7 @@ const App = () => {
         editandoServico={editandoServicoIndex !== null ? servicos[editandoServicoIndex] : null}
       />
 
-      <ListaServicos
-        servicos={servicos}
-        onEditar={editarServico}
-        onExcluir={excluirServico}
-      />
+      <ListaServicos servicos={servicos} onEditar={editarServico} onExcluir={excluirServico} />
 
       {mostrarBotaoAddOrcamento && (
         <Button onClick={adicionarOrcamento}>➕ Adicionar Orçamento</Button>

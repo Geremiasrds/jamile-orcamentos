@@ -21,9 +21,7 @@ const ClienteInput = ({ cliente, setCliente }) => {
   const [error, setError] = useState("");
 
   const validate = (value) => {
-    if (!value.trim()) {
-      setError("O nome do cliente é obrigatório!");
-    } else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(value)) {
+    if (value.trim() !== "" && !/^[A-Za-zÀ-ÿ\s]*$/.test(value)) {
       setError("O nome só pode conter letras e espaços!");
     } else {
       setError("");
@@ -31,28 +29,20 @@ const ClienteInput = ({ cliente, setCliente }) => {
   };
 
   const handleChange = (e) => {
-    let value = e.target.value;
-
-    // Remove qualquer caractere que não seja letra (inclusive acentuadas)
-    value = value.replace(/[^A-Za-zÀ-ÿ]/g, "");
-
-    // Limita repetições da mesma letra a no máximo 2 (ex: "aaa" → "aa")
-    value = value.replace(/(\w)\1{2,}/g, "$1$1");
-
+    const value = e.target.value;
     setCliente(value);
     validate(value);
   };
 
-
-  const isValid = cliente.trim() !== "";
+  const isValid = cliente.trim() !== "" && error === "";
   const hasError = error !== "";
 
   const inputStyle = {
     border: hasError
       ? "1px solid red"
       : isValid
-        ? "1px solid green"
-        : "2px solid black",
+      ? "1px solid green"
+      : "2px solid black",
     fontSize: "14px",
     outline: "none",
     width: "100%",
@@ -63,14 +53,15 @@ const ClienteInput = ({ cliente, setCliente }) => {
     <div style={wrapperStyle}>
       <Input
         type="text"
-        placeholder={error ? "" : "Nome do cliente"}
+        placeholder="Nome do cliente"
         value={cliente}
         onChange={handleChange}
         style={inputStyle}
       />
-      {error ? (
+      {hasError && (
         <span style={{ ...messageStyle(true), left: "20px" }}>{error}</span>
-      ) : cliente.trim() ? (
+      )}
+      {isValid && (
         <span
           style={{
             ...messageStyle(false),
@@ -81,7 +72,7 @@ const ClienteInput = ({ cliente, setCliente }) => {
         >
           ✔
         </span>
-      ) : null}
+      )}
     </div>
   );
 };

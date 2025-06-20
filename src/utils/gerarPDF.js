@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import logoBase64 from "./logoEditadaBase64"; // Sua imagem em base64 aqui
+import logoBase64 from "./logoEditadaBase64"; // Logo em base64
 
 const gerarPDF = (cliente, data, servicos) => {
   const doc = new jsPDF();
@@ -9,33 +9,30 @@ const gerarPDF = (cliente, data, servicos) => {
   const dataFormatada = dataObj.toLocaleDateString("pt-BR");
   const horaFormatada = new Date().toLocaleTimeString("pt-BR");
 
-  // Posições e tamanhos
+  // Logo
   const logoX = 14;
   const logoY = 10;
-  const logoSize = 40; // logo quadrada 40x40
+  const logoSize = 40;
 
   if (logoBase64) {
     doc.addImage(logoBase64, "PNG", logoX, logoY, logoSize, logoSize);
   }
 
-  // Linha vertical entre logo e título
-  const linhaX = logoX + logoSize + 5; // 5px de espaçamento após a logo
+  // Linha vertical decorativa
+  const linhaX = logoX + logoSize + 5;
   const linhaY1 = logoY;
   const linhaY2 = logoY + logoSize;
-  doc.setDrawColor(0, 0, 0); // cor preta
+  doc.setDrawColor(0, 0, 0);
   doc.setLineWidth(0.8);
   doc.line(linhaX, linhaY1, linhaX, linhaY2);
 
-  // Cor azul para título e subtítulos
+  // Título e subtítulo
   const azul = [0, 102, 204];
   doc.setTextColor(...azul);
-
-  // Título "BIG" grande à direita da linha
   doc.setFontSize(50);
   doc.setFont("helvetica", "bold");
   doc.text("BIG", linhaX + 10, 30);
 
-  // Subtítulos abaixo do título "BIG" - espaçamento menor agora (6)
   doc.setFontSize(16);
   doc.setFont("helvetica", "normal");
   const subTitulos = ["Refrigeração", "Manutenção", "Instalação"];
@@ -43,15 +40,13 @@ const gerarPDF = (cliente, data, servicos) => {
     doc.text(texto, linhaX + 15, 45 + i * 6);
   });
 
-  // Voltar para texto preto e aumentar espaçamento para as infos do cliente
+  // Informações do cliente
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(12);
-
-  // Ajustei o espaço do cliente e data para acompanhar o menor espaçamento
-  doc.text(`Cliente: ${cliente}`, 14, 70);
+  doc.text(`${cliente}`, 14, 70);
   doc.text(`Data: ${dataFormatada}  Hora: ${horaFormatada}`, 14, 78);
 
-  // Prepara os dados dos serviços convertendo para número
+  // Dados dos serviços
   const servicosNumericos = servicos.map((s) => ({
     servico: s.servico || "",
     qtd: Number(s.qtd) || 0,
@@ -63,15 +58,11 @@ const gerarPDF = (cliente, data, servicos) => {
     0
   );
 
-  doc.text(
-    `Recebo do Sr. ${cliente} o valor de R$ ${total.toFixed(
-      2
-    )} referente aos serviços abaixo:`,
-    14,
-    88
-  );
+  // 🧹 Removido texto "Recebo do Sr..."
+  // Espaço reservado ou removível
+  doc.text(``, 14, 88); // pode remover essa linha também se quiser
 
-  // Cabeçalho e corpo da tabela
+  // Tabela dos serviços
   const head = [["Descrição", "Qtd", "Valor Unitário", "Subtotal"]];
   const body = servicosNumericos.map((s) => [
     s.servico,
@@ -95,19 +86,31 @@ const gerarPDF = (cliente, data, servicos) => {
     },
   });
 
-  // Rodapé
+  // Rodapé estilizado
   const pageHeight = doc.internal.pageSize.height;
-  const rodapeAltura = 30;
+  const rodapeAltura = 32;
   const rodapeY = pageHeight - rodapeAltura;
 
-  doc.setFillColor(230, 240, 255);
+  doc.setFillColor(0, 51, 102); // Azul escuro bonito
   doc.rect(0, rodapeY, 210, rodapeAltura, "F");
 
-  const rodape = ` CNPJ: 58.228.122/0001-10 CEP: 66625-890 End: Residencial Viver Primavera | Rua do Ronari, Bloco 28 Ap 202 | Bairro Tapana Tel: (91) 99906-9633 `;
+  doc.setTextColor(255, 255, 255); // Branco
   doc.setFontSize(10);
-  const rodapeText = doc.splitTextToSize(rodape, 180);
-  doc.text(rodapeText, 14, rodapeY + 8);
+  doc.setFont("helvetica", "bold");
 
+  const linhasRodape = [
+    "📞 Tel: (91) 99906-9633  |  CNPJ: 58.228.122/0001-10",
+    "📍 Bairro Tapana - Belém/PA  |  CEP: 66625-890",
+    "🏠 Residencial Viver Primavera, Rua do Ronari, Bloco 28, Ap 202"
+  ];
+
+  linhasRodape.forEach((linha, i) => {
+    const textWidth = doc.getTextWidth(linha);
+    const centerX = (210 - textWidth) / 2;
+    doc.text(linha, centerX, rodapeY + 10 + i * 6);
+  });
+
+  // Salvar o PDF
   doc.save("orcamento.pdf");
 };
 
