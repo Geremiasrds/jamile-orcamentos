@@ -102,7 +102,7 @@ const gerarPDF = (cliente, data, servicos) => {
   // Informações da empresa com ícones, alinhadas à esquerda
   const margemEsquerda = 14;
   doc.text("Tel: (91) 99906-9633", margemEsquerda, rodapeY + 10);
-  doc.text("Residencial Viver Primavera, Rua do Ronari,", margemEsquerda, rodapeY + 16);
+  doc.text("Residencial Viver Primavera, Rua do Ronario,", margemEsquerda, rodapeY + 16);
   doc.text("Bloco 28, Ap 202", margemEsquerda, rodapeY + 22);
   doc.text("Bairro Tapana - Belém/PA | CEP: 66625-890", margemEsquerda, rodapeY + 28);
   doc.text("CNPJ: 58.228.122/0001-10", margemEsquerda, rodapeY + 34);
