@@ -3,27 +3,25 @@ import ClienteInput from "./components/ClienteInput";
 import ServicoForm from "./components/ServicoForm";
 import ListaServicos from "./components/ListaServicos";
 import OrcamentoCard from "./components/OrcamentoCard";
-import MensagemAviso from "./components/MensagemAviso"; // ⬅️ Importando o novo componente
+import MensagemAviso from "./components/MensagemAviso";
 import { Container, Titulo, Button } from "./styles/StyledComponents";
 
 const App = () => {
   const [cliente, setCliente] = useState("");
   const [servicos, setServicos] = useState([]);
   const [orcamentos, setOrcamentos] = useState([]);
-  const [editandoServicoIndex, setEditandoServicoIndex] = useState(null);
+  const [editandoServicoIndex, setEditandoServicoIndex] = useState(-1); // -1 = nenhum editando
   const [mostrarBotaoAddOrcamento, setMostrarBotaoAddOrcamento] = useState(false);
   const [mensagemErroAtualizacao, setMensagemErroAtualizacao] = useState("");
 
-  // Limpa mensagem depois de 3s
+  // Limpa mensagem após 5 segundos
   useEffect(() => {
     if (!mensagemErroAtualizacao) return;
-    const timer = setTimeout(() => {
-      setMensagemErroAtualizacao("");
-    }, 5000);
+    const timer = setTimeout(() => setMensagemErroAtualizacao(""), 5000);
     return () => clearTimeout(timer);
   }, [mensagemErroAtualizacao]);
 
-  // Carrega dados do localStorage no início
+  // Carrega dados do localStorage ao iniciar
   useEffect(() => {
     const clienteSalvo = localStorage.getItem("cliente");
     const servicosSalvos = localStorage.getItem("servicos");
@@ -34,7 +32,7 @@ const App = () => {
     if (orcamentosSalvos) setOrcamentos(JSON.parse(orcamentosSalvos));
   }, []);
 
-  // Salva no localStorage quando mudam
+  // Salva dados no localStorage quando mudam
   useEffect(() => {
     localStorage.setItem("cliente", JSON.stringify(cliente));
   }, [cliente]);
@@ -48,11 +46,11 @@ const App = () => {
   }, [orcamentos]);
 
   const adicionarServico = (novoServico) => {
-    if (editandoServicoIndex !== null) {
+    if (editandoServicoIndex >= 0) {
       const novosServicos = [...servicos];
       novosServicos[editandoServicoIndex] = novoServico;
       setServicos(novosServicos);
-      setEditandoServicoIndex(null);
+      setEditandoServicoIndex(-1);
     } else {
       setServicos([...servicos, novoServico]);
     }
@@ -61,10 +59,12 @@ const App = () => {
 
   const editarServico = (index, novoServico = null) => {
     if (novoServico) {
+      // Atualiza serviço editado
       const novosServicos = [...servicos];
       novosServicos[index] = novoServico;
       setServicos(novosServicos);
     } else {
+      // Começa a edição
       setEditandoServicoIndex(index);
     }
   };
@@ -72,18 +72,20 @@ const App = () => {
   const excluirServico = (index) => {
     const novos = servicos.filter((_, i) => i !== index);
     setServicos(novos);
-    if (editandoServicoIndex === index) setEditandoServicoIndex(null);
+
+    // Cancela edição se excluir item em edição
+    if (editandoServicoIndex === index) setEditandoServicoIndex(-1);
+
     if (novos.length === 0) setMostrarBotaoAddOrcamento(false);
   };
 
   const adicionarOrcamento = () => {
     if (servicos.length === 0) {
-      setMensagemErroAtualizacao("Adicione ao menos um serviço antes de salvar o orçamento");
+      setMensagemErroAtualizacao("Adicione ao menos um serviço antes de salvar o orçamento.");
       return;
     }
 
-    // Permite cliente vazio
-    if (!cliente) {
+    if (!cliente.trim()) {
       setMensagemErroAtualizacao("Cliente está vazio, mas orçamento será salvo mesmo assim.");
     } else {
       setMensagemErroAtualizacao("");
@@ -99,6 +101,7 @@ const App = () => {
     setCliente("");
     setServicos([]);
     setMostrarBotaoAddOrcamento(false);
+    setEditandoServicoIndex(-1);
   };
 
   const excluirOrcamento = (orc) => {
@@ -122,10 +125,14 @@ const App = () => {
 
       <ServicoForm
         adicionarServico={adicionarServico}
-        editandoServico={editandoServicoIndex !== null ? servicos[editandoServicoIndex] : null}
+        editandoServico={editandoServicoIndex >= 0 ? servicos[editandoServicoIndex] : null}
       />
 
-      <ListaServicos servicos={servicos} onEditar={editarServico} onExcluir={excluirServico} />
+      <ListaServicos
+        servicos={servicos}
+        onEditar={editarServico}
+        onExcluir={excluirServico}
+      />
 
       {mostrarBotaoAddOrcamento && (
         <Button onClick={adicionarOrcamento}>➕ Adicionar Orçamento</Button>
