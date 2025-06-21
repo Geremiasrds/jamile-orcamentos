@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.js": "/jamile-orcamentos/static/js/main.4ad5d824.js",
+    "main.js": "/jamile-orcamentos/static/js/main.121dfb79.js",
     "static/js/239.3cc3c4e1.chunk.js": "/jamile-orcamentos/static/js/239.3cc3c4e1.chunk.js",
     "static/js/213.c596ef02.chunk.js": "/jamile-orcamentos/static/js/213.c596ef02.chunk.js",
     "static/js/455.173a1a04.chunk.js": "/jamile-orcamentos/static/js/455.173a1a04.chunk.js",
     "index.html": "/jamile-orcamentos/index.html",
-    "main.4ad5d824.js.map": "/jamile-orcamentos/static/js/main.4ad5d824.js.map",
+    "main.121dfb79.js.map": "/jamile-orcamentos/static/js/main.121dfb79.js.map",
     "239.3cc3c4e1.chunk.js.map": "/jamile-orcamentos/static/js/239.3cc3c4e1.chunk.js.map",
     "213.c596ef02.chunk.js.map": "/jamile-orcamentos/static/js/213.c596ef02.chunk.js.map",
     "455.173a1a04.chunk.js.map": "/jamile-orcamentos/static/js/455.173a1a04.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.4ad5d824.js"
+    "static/js/main.121dfb79.js"
   ]
 }
